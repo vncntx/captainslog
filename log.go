@@ -106,9 +106,10 @@ func (log *Logger) Log(level Level, format string, args ...interface{}) {
 		printer = printf
 	}
 	printer("%7s", levelName)
-	fmt.Printf(":: %s :: ", time.Now().Format(log.TimeFormat))
-	printer("%s :: ", log.getName())
-	fmt.Printf(format, args...)
+	printf(" :: %s :: ", time.Now().Format(log.TimeFormat))
+	printer("%s", log.getName())
+	printf(" :: ")
+	printf(format, args...)
 	fmt.Println()
 }
 
