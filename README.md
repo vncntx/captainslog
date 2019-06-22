@@ -9,6 +9,8 @@ A simple logging library for [Go](https://golang.org/).
 - Colored output, even on Windows
 - Output name of calling function
 
+![Screenshot of captainslog in action](./assets/screenshot.png)
+
 ## Usage
 
 ```go
