@@ -29,3 +29,5 @@ func main() {
 	log.Error("This is %s", "Error")
 }
 ```
+
+<small>Gopher artwork by [Ashley McNamara](https://twitter.com/ashleymcnamara) on [Gopherize.me](https://gopherize.me/gopher/5dcbe4dc48ab6fbf903aae352f8742cb59e7099b)</small>
