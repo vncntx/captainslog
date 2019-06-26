@@ -2,6 +2,8 @@
 
 [![GoReportCard](https://goreportcard.com/badge/github.com/vincentfiestada/captainslog)](https://goreportcard.com/report/github.com/vincentfiestada/captainslog)
 [![GoDoc](https://godoc.org/github.com/vincentfiestada/captainslog?status.svg)](https://godoc.org/github.com/vincentfiestada/captainslog)
+[![Conventional Commits](https://img.shields.io/badge/commits-conventional-00b6ff.svg?labelColor=1F6CB4)](https://conventionalcommits.org)
+[![License: MIT](https://img.shields.io/github/license/vincentfiestada/acrylic.svg?labelColor=1F6CB4&color=00b6ff)](https://github.com/vincentfiestada/acrylic/blob/master/LICENSE)
 
 A simple logging library for [Go](https://golang.org/).
 
