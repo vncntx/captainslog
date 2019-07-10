@@ -1,15 +1,30 @@
-package captainslog
+package captainslog_test
 
-import "testing"
+import (
+	"testing"
 
-func TestDemo(_ *testing.T) {
-	log := NewLogger()
-	log.SetLevel(LogLevelSilly)
+	"github.com/vincentfiestada/captainslog"
+)
 
-	log.Silly("Test %d", 1)
-	log.Debug("Test %d", 2)
-	log.Verbose("Test %d", 3)
-	log.Info("Test %d", 4)
-	log.Warn("Test %d", 5)
-	log.Error("Test %d", 6)
+func TestDemo(t *testing.T) {
+	log := captainslog.NewLogger()
+	log.SetLevel(captainslog.LogLevelSilly)
+
+	log.Silly("%s", "silly")
+	log.Debug("%s", "debug")
+	log.Verbose("%s", "verbose")
+	log.Info("%s", "info")
+	log.Warn("%s", "warn")
+	log.Error("%s", "error")
+}
+
+func TestPanic(t *testing.T) {
+	defer func() {
+		if err := recover(); err == nil {
+			t.Fail()
+		}
+	}()
+
+	log := captainslog.NewLogger()
+	log.Panic("%s", "panic")
 }

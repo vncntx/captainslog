@@ -8,15 +8,19 @@ import (
 const anonymous = "anonymous"
 
 // GetName returns the name of the n-th caller up the stack
-func GetName(n int) string {
-	callerPtrs := make([]uintptr, 1)
-	callersCount := runtime.Callers(n, callerPtrs)
-	if callersCount == 0 {
-		return anonymous
+func GetName(skip int) string {
+	callers := make([]uintptr, skip+3)
+	n := runtime.Callers(0, callers)
+	target := runtime.Frame{
+		Function: anonymous,
 	}
-	callerFunc := runtime.FuncForPC(callerPtrs[0])
-	if callerFunc == nil {
-		return anonymous
+	if n > 0 {
+		frames := runtime.CallersFrames(callers)
+		index := 0
+		for current, more := frames.Next(); more && index < n+skip; current, more = frames.Next() {
+			target = current
+			index++
+		}
 	}
-	return callerFunc.Name()
+	return target.Function
 }
