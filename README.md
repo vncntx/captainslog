@@ -36,6 +36,8 @@ func init() {
 
 ```
 
+The logging levels supported, in decreasing order of priority, are Fatal, Error, Warn, Info, Debug, and Trace.
+
 ## Development
 
 Run tests recursively with coverage:
