@@ -25,19 +25,14 @@ func SetLevel(level Level) {
 	getDefaultLogger().LogLevel = level
 }
 
-// Silly logs silly-level messages with the default logger
-func Silly(format string, args ...interface{}) {
-	getDefaultLogger().Silly(format, args...)
+// Trace logs trace-level messages with the default logger
+func Trace(format string, args ...interface{}) {
+	getDefaultLogger().Trace(format, args...)
 }
 
 // Debug logs debug-level messages with the default logger
 func Debug(format string, args ...interface{}) {
 	getDefaultLogger().Debug(format, args...)
-}
-
-// Verbose logs verbose-level messages with the default logger
-func Verbose(format string, args ...interface{}) {
-	getDefaultLogger().Verbose(format, args...)
 }
 
 // Info logs info-level messages with the default logger

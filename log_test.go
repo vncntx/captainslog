@@ -6,13 +6,16 @@ import (
 	"github.com/vincentfiestada/captainslog"
 )
 
-func TestDemo(t *testing.T) {
-	log := captainslog.NewLogger()
-	log.SetLevel(captainslog.LogLevelSilly)
+var log *captainslog.Logger
 
-	log.Silly("%s", "silly")
+func init() {
+	log = captainslog.NewLogger()
+	log.SetLevel(captainslog.LogLevelTrace)
+}
+
+func TestDemo(t *testing.T) {
+	log.Trace("%s", "trace")
 	log.Debug("%s", "debug")
-	log.Verbose("%s", "verbose")
 	log.Info("%s", "info")
 	log.Warn("%s", "warn")
 	log.Error("%s", "error")
@@ -25,6 +28,5 @@ func TestPanic(t *testing.T) {
 		}
 	}()
 
-	log := captainslog.NewLogger()
 	log.Panic("%s", "panic")
 }

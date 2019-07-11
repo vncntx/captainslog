@@ -12,14 +12,13 @@ import (
 
 // Log levels
 const (
-	LogLevelSilly   = iota
-	LogLevelDebug   = iota
-	LogLevelVerbose = iota
-	LogLevelInfo    = iota
-	LogLevelWarn    = iota
-	LogLevelError   = iota
-	LogLevelFatal   = iota
-	LogLevelQuiet   = iota
+	LogLevelTrace = iota
+	LogLevelDebug = iota
+	LogLevelInfo  = iota
+	LogLevelWarn  = iota
+	LogLevelError = iota
+	LogLevelFatal = iota
+	LogLevelQuiet = iota
 )
 
 // Error codes
@@ -28,7 +27,6 @@ const errFatal = 1
 // color print functions
 var (
 	pink   = color.New(color.FgMagenta).PrintfFunc()
-	cyan   = color.New(color.FgCyan).PrintfFunc()
 	blue   = color.New(color.FgBlue).PrintfFunc()
 	green  = color.New(color.FgGreen).PrintfFunc()
 	yellow = color.New(color.FgYellow).PrintfFunc()
@@ -84,17 +82,13 @@ func (log *Logger) Log(level Level, format string, args ...interface{}) {
 	var printer printFunc
 	var levelName string
 	switch level {
-	case LogLevelSilly:
+	case LogLevelTrace:
 		printer = pink
-		levelName = "silly"
+		levelName = "trace"
 		break
 	case LogLevelDebug:
-		printer = cyan
-		levelName = "debug"
-		break
-	case LogLevelVerbose:
 		printer = green
-		levelName = "verbose"
+		levelName = "debug"
 		break
 	case LogLevelInfo:
 		printer = blue
@@ -103,9 +97,12 @@ func (log *Logger) Log(level Level, format string, args ...interface{}) {
 	case LogLevelWarn:
 		printer = yellow
 		levelName = "warn"
-	default:
+	case LogLevelError:
 		printer = red
 		levelName = "error"
+	default:
+		printer = red
+		levelName = "fatal"
 	}
 	if !log.HasColor {
 		printer = printf
@@ -127,19 +124,14 @@ func (log *Logger) getName() string {
 	return caller.GetName(log.callerDepth)
 }
 
-// Silly logs messages with level Silly
-func (log *Logger) Silly(format string, args ...interface{}) {
-	log.Log(LogLevelSilly, format, args...)
+// Trace logs messages with level Trace
+func (log *Logger) Trace(format string, args ...interface{}) {
+	log.Log(LogLevelTrace, format, args...)
 }
 
 // Debug logs messages with level Debug
 func (log *Logger) Debug(format string, args ...interface{}) {
 	log.Log(LogLevelDebug, format, args...)
-}
-
-// Verbose logs messages with level Verbose
-func (log *Logger) Verbose(format string, args ...interface{}) {
-	log.Log(LogLevelVerbose, format, args...)
 }
 
 // Info logs messages with level Info
