@@ -2,6 +2,7 @@ package captainslog
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/vincentfiestada/captainslog/caller"
@@ -17,8 +18,12 @@ const (
 	LogLevelInfo    = iota
 	LogLevelWarn    = iota
 	LogLevelError   = iota
+	LogLevelFatal   = iota
 	LogLevelQuiet   = iota
 )
+
+// Error codes
+const errFatal = 1
 
 // color print functions
 var (
@@ -150,6 +155,25 @@ func (log *Logger) Warn(format string, args ...interface{}) {
 // Error logs messages with level Error
 func (log *Logger) Error(format string, args ...interface{}) {
 	log.Log(LogLevelError, format, args...)
+}
+
+// Exit logs an error and exits with an error code
+func (log *Logger) Exit(code int, format string, args ...interface{}) {
+	log.Log(LogLevelFatal, format, args...)
+	os.Exit(code)
+}
+
+// Fatal logs an error and exits with error code 1
+func (log *Logger) Fatal(format string, args ...interface{}) {
+	log.Log(LogLevelFatal, format, args...)
+	os.Exit(errFatal)
+}
+
+// Panic log an error and panics
+func (log *Logger) Panic(format string, args ...interface{}) {
+	msg := fmt.Sprintf(format, args...)
+	log.Log(LogLevelFatal, msg)
+	panic(msg)
 }
 
 // printf a simple colorless print function

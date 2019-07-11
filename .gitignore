@@ -1,0 +1,11 @@
+.vs
+.vscode
+.idea
+.cache
+bin
+logs
+vendor
+.DS_Store
+desktop.ini
+*.log
+*.exe
