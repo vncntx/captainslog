@@ -22,7 +22,7 @@ func SetName(name string) {
 
 // SetLevel sets the logging level for the default logger
 func SetLevel(level Level) {
-	getDefaultLogger().LogLevel = level
+	getDefaultLogger().Level = level
 }
 
 // Trace logs trace-level messages with the default logger

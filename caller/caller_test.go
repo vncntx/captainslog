@@ -16,3 +16,11 @@ func TestGetName(t *testing.T) {
 		assert.Equal(expected, caller.GetName(2))
 	}()
 }
+
+func TestShorten(t *testing.T) {
+	assert := assert.New(t)
+
+	path := "github.com/vincentfiestada/captainslog/caller_test.TestShorten"
+	assert.Equal("TestShorten", caller.Shorten(path, 15))
+	assert.Equal("caller_test.TestShorten", caller.Shorten(path, 30))
+}

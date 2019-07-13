@@ -41,10 +41,11 @@ type Level uint8
 
 // Logger is an object for logging
 type Logger struct {
-	LogLevel   Level
-	TimeFormat string
-	Name       string
-	HasColor   bool
+	Level         Level
+	TimeFormat    string
+	Name          string
+	HasColor      bool
+	MaxNameLength int
 
 	callerDepth int
 }
@@ -52,10 +53,11 @@ type Logger struct {
 // NewLogger returns a new logger with the specified minimum logging level
 func NewLogger() *Logger {
 	return &Logger{
-		LogLevel:    LogLevelDebug,
-		TimeFormat:  "01-02-2006 15:04:05 MST",
-		HasColor:    true,
-		callerDepth: 4,
+		Level:         LogLevelDebug,
+		TimeFormat:    "01-02-2006 15:04:05 MST",
+		HasColor:      true,
+		MaxNameLength: 15,
+		callerDepth:   4,
 	}
 }
 
@@ -71,12 +73,12 @@ func (log *Logger) SetName(name string) {
 
 // SetLevel sets the logging level
 func (log *Logger) SetLevel(level Level) {
-	log.LogLevel = level
+	log.Level = level
 }
 
 // Log messages with the specified level
 func (log *Logger) Log(level Level, format string, args ...interface{}) {
-	if level < log.LogLevel {
+	if level < log.Level {
 		return
 	}
 	var printer printFunc
@@ -121,7 +123,7 @@ func (log *Logger) getName() string {
 		return log.Name
 	}
 	// if the logger has no name, return the name of the caller
-	return caller.GetName(log.callerDepth)
+	return caller.Shorten(caller.GetName(log.callerDepth), log.MaxNameLength)
 }
 
 // Trace logs messages with level Trace
