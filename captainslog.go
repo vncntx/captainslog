@@ -49,3 +49,18 @@ func Warn(format string, args ...interface{}) {
 func Error(format string, args ...interface{}) {
 	getDefaultLogger().Error(format, args...)
 }
+
+// Exit logs an error and exits with an error code
+func Exit(code int, format string, args ...interface{}) {
+	getDefaultLogger().Exit(code, format, args...)
+}
+
+// Fatal logs an error and exits with error code 1
+func Fatal(format string, args ...interface{}) {
+	getDefaultLogger().Fatal(format, args...)
+}
+
+// Panic log an error and panics
+func Panic(format string, args ...interface{}) {
+	getDefaultLogger().Panic(format, args...)
+}
