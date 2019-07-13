@@ -1,0 +1,28 @@
+version: "2"
+
+tasks:
+  install:
+    desc: Install dependencies
+    cmds:
+      - go mod verify
+      - task: install-hooks
+  test:
+    desc: Run all tests
+    cmds:
+      - go test ./... --cover
+  format:
+    desc: Format Go code
+    cmds:
+      - go fmt .
+  install-hooks:
+    desc: Setup Git hooks
+    cmds:
+      - | 
+        sh -c 'for file in $(ls hooks/*);
+        do \
+          filename="${file##*/}";
+          basename="${filename%.*}";
+          mkdir -p .git/hooks/;
+          cp $file .git/hooks/$basename;
+          chmod +x .git/hooks/$basename;
+        done'

@@ -40,10 +40,10 @@ The logging levels supported, in decreasing order of priority, are Fatal, Error,
 
 ## Development
 
-Run tests recursively with coverage:
+This project uses [Task runner](https://taskfile.dev/). List all available tasks by running `task -l`. To get started, run:
 
 ```
-go test ./... --cover
+task install
 ```
 
 <small>Gopher artwork by [Ashley McNamara](https://twitter.com/ashleymcnamara) on [Gopherize.me](https://gopherize.me/gopher/5dcbe4dc48ab6fbf903aae352f8742cb59e7099b)</small>
