@@ -99,9 +99,11 @@ func (log *Logger) Log(level Level, format string, args ...interface{}) {
 	case LogLevelWarn:
 		printer = yellow
 		levelName = "warn"
+		break
 	case LogLevelError:
 		printer = red
 		levelName = "error"
+		break
 	default:
 		printer = red
 		levelName = "fatal"
