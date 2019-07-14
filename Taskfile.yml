@@ -14,15 +14,19 @@ tasks:
     desc: Format Go code
     cmds:
       - go fmt .
+  check:
+    desc: Check code quality
+    cmds:
+      - go vet .
   install-hooks:
     desc: Setup Git hooks
     cmds:
       - | 
-        sh -c 'for file in $(ls hooks/*);
-        do \
+        for file in $(ls hooks/*);
+        do 
           filename="${file##*/}";
           basename="${filename%.*}";
           mkdir -p .git/hooks/;
           cp $file .git/hooks/$basename;
           chmod +x .git/hooks/$basename;
-        done'
+        done

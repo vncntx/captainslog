@@ -19,6 +19,11 @@ func TestDemo(t *testing.T) {
 	log.Info("%s", "info")
 	log.Warn("%s", "warn")
 	log.Error("%s", "error")
+	log.Field(
+		"id", 1,
+	).Field(
+		"user", "vincentofearth",
+	).Debug("structured logging")
 }
 
 func TestPanic(t *testing.T) {
