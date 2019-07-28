@@ -7,6 +7,9 @@ import (
 	"github.com/vincentfiestada/captainslog/format"
 )
 
+// SprintFunc formats and returns a string
+type SprintFunc func(string, ...interface{}) string
+
 // Message is a log message that gets built in multiple steps
 type Message struct {
 	time      string
@@ -16,54 +19,31 @@ type Message struct {
 	level     Level
 	threshold Level
 	format    format.Format
-	colorize  func(string, ...interface{})
+	hasColor  bool
+	stdout    *os.File
+	stderr    *os.File
 }
 
 // SetLevel sets the priority level for the message
 func (msg *Message) SetLevel(level Level) {
 	msg.level = level
-	if msg.colorize != nil {
-		return
-	}
-	switch msg.level {
-	case LogLevelTrace:
-		msg.colorize = purple
-		break
-	case LogLevelDebug:
-		msg.colorize = green
-		break
-	case LogLevelInfo:
-		msg.colorize = blue
-		break
-	case LogLevelWarn:
-		msg.colorize = yellow
-		break
-	case LogLevelError:
-		msg.colorize = red
-		break
-	case LogLevelFatal:
-		msg.colorize = red
-		break
-	default:
-		msg.colorize = printf
-	}
 }
 
-// GetLevel returns the message's priority level name
-func (msg *Message) GetLevel() string {
+// GetLevel returns the appropriate level and color
+func (msg *Message) GetLevel() (stream *os.File, level string, color SprintFunc) {
 	switch msg.level {
 	case LogLevelTrace:
-		return "trace"
+		return msg.stdout, "trace", purple
 	case LogLevelDebug:
-		return "debug"
+		return msg.stdout, "debug", green
 	case LogLevelInfo:
-		return "info"
+		return msg.stdout, "info", blue
 	case LogLevelWarn:
-		return "warn"
+		return msg.stderr, "warn", yellow
 	case LogLevelError:
-		return "error"
+		return msg.stderr, "error", red
 	default:
-		return "fatal"
+		return msg.stderr, "fatal", red
 	}
 }
 
@@ -74,22 +54,28 @@ func (msg *Message) print() {
 		return
 	}
 
-	msg.colorize("%6s", msg.GetLevel())
-	msg.separate()
-	fmt.Print(msg.time)
-	msg.separate()
-	msg.colorize(msg.name)
-	msg.separate()
-	if !msg.format.IsEmpty() {
-		fmt.Print(msg.format.GetFields())
-		msg.separate()
+	stream, level, colorize := msg.GetLevel()
+	if !msg.hasColor {
+		colorize = fmt.Sprintf
 	}
-	fmt.Println(msg.text)
+
+	stream.WriteString(colorize("%6s", level))
+	msg.separate(stream)
+	stream.WriteString(msg.time)
+	msg.separate(stream)
+	stream.WriteString(colorize(msg.name))
+	msg.separate(stream)
+	if !msg.format.IsEmpty() {
+		stream.WriteString(msg.format.GetFields())
+		msg.separate(stream)
+	}
+	stream.WriteString(msg.text)
+	stream.WriteString("\n")
 }
 
 // separate prints out a separator string
-func (msg *Message) separate() {
-	fmt.Print(msg.sep)
+func (msg *Message) separate(stream *os.File) {
+	stream.WriteString(msg.sep)
 }
 
 // Field adds a data field to the log

@@ -1,20 +1,14 @@
 package captainslog
 
 import (
-	"fmt"
-
 	"github.com/fatih/color"
 )
 
 // Color print functions
 var (
-	purple = color.New(color.FgMagenta).PrintfFunc()
-	blue   = color.New(color.FgBlue).PrintfFunc()
-	green  = color.New(color.FgGreen).PrintfFunc()
-	yellow = color.New(color.FgYellow).PrintfFunc()
-	red    = color.New(color.FgRed).PrintfFunc()
+	purple = color.New(color.FgMagenta).SprintfFunc()
+	blue   = color.New(color.FgBlue).SprintfFunc()
+	green  = color.New(color.FgGreen).SprintfFunc()
+	yellow = color.New(color.FgYellow).SprintfFunc()
+	red    = color.New(color.FgRed).SprintfFunc()
 )
-
-func printf(format string, args ...interface{}) {
-	fmt.Printf(format, args...)
-}

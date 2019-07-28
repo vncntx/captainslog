@@ -1,6 +1,7 @@
 package captainslog
 
 import (
+	"os"
 	"time"
 
 	"github.com/vincentfiestada/captainslog/caller"
@@ -32,6 +33,8 @@ type Logger struct {
 	TimeFormat    string
 	HasColor      bool
 	MaxNameLength int
+	Stdout        *os.File
+	Stderr        *os.File
 }
 
 // NewLogger returns a new logger with the specified minimum logging level
@@ -42,6 +45,8 @@ func NewLogger() *Logger {
 		HasColor:      true,
 		MaxNameLength: 15,
 		LogFormat:     format.FactoryOf(format.Flat()),
+		Stdout:        os.Stdout,
+		Stderr:        os.Stderr,
 	}
 }
 
@@ -76,10 +81,10 @@ func (log *Logger) createMessage() *Message {
 		time:      time.Now().Format(log.TimeFormat),
 		name:      log.getName(),
 		format:    log.LogFormat(),
+		stdout:    log.Stdout,
+		stderr:    log.Stderr,
+		hasColor:  log.HasColor,
 		threshold: log.Level,
-	}
-	if !log.HasColor {
-		msg.colorize = printf
 	}
 	return msg
 }
