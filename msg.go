@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/vincentfiestada/captainslog/format"
+	"github.com/vincentfiestada/captainslog/preflight"
 )
 
 // SprintFunc formats and returns a string
@@ -16,31 +17,31 @@ type Message struct {
 	name      string
 	text      string
 	sep       string
-	level     Level
-	threshold Level
-	format    format.Format
+	level     int
+	threshold int
 	hasColor  bool
 	stdout    *os.File
 	stderr    *os.File
+	format    format.Format
 }
 
 // SetLevel sets the priority level for the message
-func (msg *Message) SetLevel(level Level) {
+func (msg *Message) SetLevel(level int) {
 	msg.level = level
 }
 
 // GetLevel returns the appropriate level and color
 func (msg *Message) GetLevel() (stream *os.File, level string, color SprintFunc) {
 	switch msg.level {
-	case LogLevelTrace:
+	case LevelTrace:
 		return msg.stdout, "trace", purple
-	case LogLevelDebug:
+	case LevelDebug:
 		return msg.stdout, "debug", green
-	case LogLevelInfo:
+	case LevelInfo:
 		return msg.stdout, "info", blue
-	case LogLevelWarn:
+	case LevelWarn:
 		return msg.stderr, "warn", yellow
-	case LogLevelError:
+	case LevelError:
 		return msg.stderr, "error", red
 	default:
 		return msg.stderr, "fatal", red
@@ -85,7 +86,7 @@ func (msg *Message) Field(name string, value interface{}) *Message {
 }
 
 // Log outputs the message with the specified level
-func (msg *Message) Log(level Level, format string, args ...interface{}) {
+func (msg *Message) Log(level int, format string, args ...interface{}) {
 	msg.SetLevel(level)
 	msg.text = fmt.Sprintf(format, args...)
 	msg.print()
@@ -93,43 +94,43 @@ func (msg *Message) Log(level Level, format string, args ...interface{}) {
 
 // Trace outputs the message with level Trace
 func (msg *Message) Trace(format string, args ...interface{}) {
-	msg.Log(LogLevelTrace, format, args...)
+	msg.Log(LevelTrace, format, args...)
 }
 
 // Debug outputs the message with level Debug
 func (msg *Message) Debug(format string, args ...interface{}) {
-	msg.Log(LogLevelDebug, format, args...)
+	msg.Log(LevelDebug, format, args...)
 }
 
 // Info outputs the message with level Info
 func (msg *Message) Info(format string, args ...interface{}) {
-	msg.Log(LogLevelInfo, format, args...)
+	msg.Log(LevelInfo, format, args...)
 }
 
 // Warn outputs the message with level Warn
 func (msg *Message) Warn(format string, args ...interface{}) {
-	msg.Log(LogLevelWarn, format, args...)
+	msg.Log(LevelWarn, format, args...)
 }
 
 // Error outputs the message with level Error
 func (msg *Message) Error(format string, args ...interface{}) {
-	msg.Log(LogLevelError, format, args...)
+	msg.Log(LevelError, format, args...)
 }
 
 // Exit outputs the message as an error and exits with the given code
 func (msg *Message) Exit(code int, format string, args ...interface{}) {
-	msg.Log(LogLevelFatal, format, args...)
-	os.Exit(code)
+	msg.Log(LevelFatal, format, args...)
+	preflight.Scaffold.OSExit(code)
 }
 
 // Fatal outputs the message as an error and exits with code 1
 func (msg *Message) Fatal(format string, args ...interface{}) {
-	msg.Log(LogLevelFatal, format, args...)
-	os.Exit(1)
+	msg.Log(LevelFatal, format, args...)
+	preflight.Scaffold.OSExit(1)
 }
 
 // Panic outputs the message as an error and panics
 func (msg *Message) Panic(format string, args ...interface{}) {
-	msg.Log(LogLevelFatal, format, args...)
+	msg.Log(LevelFatal, format, args...)
 	panic(fmt.Errorf(format, args...))
 }

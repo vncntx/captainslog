@@ -6,7 +6,7 @@ import (
 )
 
 // name for anonymous calling functions
-const anonymous = "anonymous"
+const anonymous = "anon"
 
 // GetName returns the name of the n-th caller up the stack
 func GetName(skip int) string {

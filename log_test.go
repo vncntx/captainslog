@@ -1,214 +1,185 @@
 package captainslog_test
 
 import (
-	"bytes"
-	"io"
 	"os"
-	"os/exec"
-	"regexp"
-	"strings"
 	"testing"
+	"time"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/vincentfiestada/captainslog"
+	"github.com/vincentfiestada/captainslog/preflight"
 )
 
-// ANSI Color Codes
+// Patterns
 const (
-	red    = "31m"
-	green  = "32m"
-	yellow = "33m"
-	blue   = "34m"
-	purple = "35m"
+	iso8601 = "([0-9]{2}-){2}[0-9]{4} ([0-9]{2}:){2}[0-9]{2} .+"
 )
 
-type unit struct {
-	*testing.T
+func getLogger() *captainslog.Logger {
+	log := captainslog.NewLogger()
+	log.Level = captainslog.LevelTrace
+	return log
 }
 
-var log *captainslog.Logger
-
-func init() {
-	log = captainslog.NewLogger()
-	log.SetLevel(captainslog.LogLevelTrace)
-}
-
-func TestLog(test *testing.T) {
-	t := unit{test}
+func TestNewLogger(test *testing.T) {
+	t := preflight.Unit(test)
 
 	log := captainslog.NewLogger()
-	log.SetLevel(captainslog.LogLevelTrace)
 
-	// intercept stdout and stderr
-	out, outChan, readOut := t.intercept(os.Stdout)
-	err, errChan, readErr := t.intercept(os.Stderr)
-	log.Stdout = out
-	log.Stderr = err
+	// should return a new Logger instance
+	t.Expect(log).Is().Not().Nil()
 
-	// read from streams to channels
-	go readOut()
-	go readErr()
-
-	name := "TestLog"
-	message := "test 1"
-	// perform log assertions
-	for _, logF := range []func(string, ...interface{}){
-		log.Trace,
-		log.Debug,
-		log.Info,
-		log.Warn,
-		log.Error,
-	} {
-		logF("test %d", 1)
-	}
-	out.Close()
-	err.Close()
-
-	logs := strings.Split(<-outChan, "\n")
-	assert.Equal(t, 3, len(logs)-1)
-	t.assertLog(logs[0], purple, "trace", name, message)
-	t.assertLog(logs[1], green, "debug", name, message)
-	t.assertLog(logs[2], blue, "info", name, message)
-
-	logs = strings.Split(<-errChan, "\n")
-	assert.Equal(t, 2, len(logs)-1)
-	t.assertLog(logs[0], yellow, "warn", name, message)
-	t.assertLog(logs[1], red, "error", name, message)
+	// should use default values
+	t.Expect(log.HasColor).Is().EqualTo(true)
+	t.Expect(log.Level).Equals(captainslog.LevelDebug)
+	t.Expect(log.TimeFormat).Equals(captainslog.ISO8601)
+	t.Expect(log.MaxNameLength).Equals(15)
+	t.Expect(log.Stdout).Equals(os.Stdout)
+	t.Expect(log.Stderr).Equals(os.Stderr)
 }
 
-func TestFatal(test *testing.T) {
-	t := unit{test}
+func TestLogs(test *testing.T) {
+	t := preflight.Unit(test)
 
-	if os.Getenv("EXIT") == "1" {
-		log.Fatal("test")
-		return
+	stdout, stderr := t.CaptureLogs(func(stdout *os.File, stderr *os.File) {
+		log := getLogger()
+		log.Stdout = stdout
+		log.Stderr = stderr
+
+		log.Trace("message %d", 1)
+		log.Debug("message %d", 2)
+		log.Info("message %d", 3)
+		log.Warn("message %d", 4)
+		log.Error("message %d", 5)
+	})
+
+	check := func(log *preflight.LogExpectation, level string, message string) {
+		log.Fields.Is().Empty()
+		log.Level.Equals(level)
+		log.Message.Equals(message)
+		log.Time.Matches(iso8601)
+		log.Name.Matches("func[0-9]+")
 	}
-	cmd := exec.Command(os.Args[0], "-test.run=TestFatal")
-	cmd.Env = append(os.Environ(), "EXIT=1")
-	t.assertExitCode(cmd, 1)
+
+	// trace, debug, info should go to stdout
+	// warn, error should go to stderr
+	t.Expect(stdout).HasLength(3)
+	t.Expect(stderr).HasLength(2)
+
+	// log messages should use the correct name, level, & message
+	check(stdout[0], "trace", "message 1")
+	check(stdout[1], "debug", "message 2")
+	check(stdout[2], "info", "message 3")
+
+	check(stderr[0], "warn", "message 4")
+	check(stderr[1], "error", "message 5")
+}
+
+func TestName(test *testing.T) {
+	t := preflight.Unit(test)
+
+	expectedName := "captainslog"
+
+	logs, _ := t.CaptureLogs(func(stdout *os.File, _ *os.File) {
+		log := getLogger()
+		log.Stdout = stdout
+		log.Name = expectedName
+
+		log.Info("x")
+	})
+
+	logs[0].Name.Equals(expectedName)
+}
+
+func TestTimeFormat(test *testing.T) {
+	t := preflight.Unit(test)
+
+	rfc822 := "[0-9]{2} [A-Z][a-z]{2} [0-9]{2} [0-9]{2}:[0-9]{2} .+"
+
+	logs, _ := t.CaptureLogs(func(stdout *os.File, _ *os.File) {
+		log := getLogger()
+		log.Stdout = stdout
+		log.TimeFormat = time.RFC822
+
+		log.Info("x")
+	})
+
+	logs[0].Time.Matches(rfc822)
 }
 
 func TestExit(test *testing.T) {
-	t := unit{test}
+	t := preflight.Unit(test)
 
-	if os.Getenv("EXIT") == "1" {
-		log.Exit(2, "test")
-		return
-	}
-	cmd := exec.Command(os.Args[0], "-test.run=TestExit")
-	cmd.Env = append(os.Environ(), "EXIT=1")
-	t.assertExitCode(cmd, 2)
+	_, logs := t.CaptureLogs(func(_ *os.File, stderr *os.File) {
+		t.ExpectExitCode(func() {
+			log := captainslog.NewLogger()
+			log.Stderr = stderr
+
+			log.Exit(2, "message")
+
+		}).Equals(2)
+	})
+
+	logs[0].Level.Equals("fatal")
+	logs[0].Message.Equals("message")
+}
+
+func TestFatal(test *testing.T) {
+	t := preflight.Unit(test)
+
+	t.ExpectExitCode(func() {
+		log := captainslog.NewLogger()
+
+		log.Fatal("message")
+
+	}).Equals(1)
 }
 
 func TestPanic(test *testing.T) {
-	t := unit{test}
-
-	log := captainslog.NewLogger()
-
-	// intercept stderr
-	err, errChan, readErr := t.intercept(os.Stderr)
-	log.Stderr = err
+	t := preflight.Unit(test)
 
 	defer func() {
-		// must log fatal error
-		err.Close()
-		logs := <-errChan
-		t.assertLog(logs, red, "fatal", "TestPanic", "test 1")
-
-		// must panic with error
-		panicLog := recover().(error)
-		assert.Equal(t, "test 1", panicLog.Error())
+		t.Expect(recover().(error).Error()).Equals("x")
 	}()
 
-	go readErr()
-	log.Panic("test %d", 1)
+	_, logs := t.CaptureLogs(func(_ *os.File, stderr *os.File) {
+		log := getLogger()
+		log.Stderr = stderr
+
+		log.Panic("x")
+	})
+
+	logs[0].Message.Equals("x")
+	logs[0].Level.Equals("fatal")
 }
 
-func TestSetTimeFormat(test *testing.T) {
-	t := unit{test}
+func TestFields(test *testing.T) {
+	t := preflight.Unit(test)
 
-	log := captainslog.NewLogger()
-	log.SetTimeFormat("2006/01/02 03:04 PM")
+	logs, _ := t.CaptureLogs(func(stdout *os.File, stderr *os.File) {
+		log := getLogger()
+		log.Stdout = stdout
+		log.Stderr = stderr
 
-	// intercept stdout
-	out, ch, read := t.intercept(os.Stdout)
-	log.Stdout = out
-	go read()
+		log.Field("captain", "picard").Info("energize")
+	})
 
-	log.Info("test")
-	out.Close()
-
-	// datetime must be formatted correctly
-	logs := <-ch
-	datetime := strings.Split(logs, " :: ")[1]
-	t.matches("[0-9]{4}(/[0-9]{2}){2} [0-9]{2}:[0-9]{2} (AM|PM)", datetime)
+	logs[0].Message.Equals("energize")
+	logs[0].Fields.Equals("captain=\"picard\"")
 }
 
-// -------- test utils --------
+func TestLevels(test *testing.T) {
+	t := preflight.Unit(test)
 
-// intercept creates a channel for intercepting a stream
-func (test unit) intercept(target *os.File) (w *os.File, ch chan string, read func()) {
-	r, w, err := os.Pipe()
-	if err != nil {
-		test.Error(err)
-	}
-	ch = make(chan string)
-	read = func() {
-		var buf bytes.Buffer
-		_, err := io.Copy(&buf, r)
-		if err != nil {
-			test.Error(err)
-		}
-		ch <- buf.String()
-		r.Close()
-	}
-	return w, ch, read
-}
+	stdout, stderr := t.CaptureLogs(func(stdout *os.File, stderr *os.File) {
+		log := getLogger()
+		log.Stdout = stdout
+		log.Stderr = stderr
+		log.Level = captainslog.LevelWarn
 
-// colorless removes ANSI color codes from text and returns the color
-func (test unit) colorless(text string) (colorless string, color string) {
-	rxp, err := regexp.Compile("\\x1b\\[[0-9;]*m")
-	if err != nil {
-		test.Error(err)
-	}
-	colorCode := rxp.FindString(text)
-	if len(colorCode) >= 3 {
-		// get the color code if it is present
-		color = colorCode[len(colorCode)-3:]
-	}
-	return rxp.ReplaceAllString(text, ""), color
-}
+		log.Info("x")
+		log.Warn("x")
+	})
 
-// matches asserts that a string matches a regular expression
-func (test unit) matches(pattern string, text string) {
-	matches, err := regexp.MatchString(pattern, text)
-	if err != nil {
-		test.Error(err)
-	}
-	assert.True(test, matches)
-}
-
-// assertLog asserts the contents of a log message
-func (test unit) assertLog(log string, expectedColor string, expectedLevel string, expectedName string, expectedMsg string) {
-	text, color := test.colorless(log)
-	parts := strings.Split(text, " :: ")
-	level, time, name, message := parts[0], parts[1], parts[2], parts[3]
-	if len(color) > 0 {
-		// assert color only if log has colors
-		assert.Equal(test, expectedColor, color)
-	}
-	assert.Equal(test, expectedLevel, strings.TrimLeft(level, " "))
-	assert.Equal(test, expectedName, name)
-	assert.Equal(test, expectedMsg, strings.TrimRight(message, "\n"))
-	test.matches("([0-9]{2}-){2}[0-9]{4} ([0-9]{2}:){2}[0-9]{2} .{3}", time)
-}
-
-func (test unit) assertExitCode(cmd *exec.Cmd, expectedCode int) {
-	exit := cmd.Run()
-	if e, ok := exit.(*exec.ExitError); ok {
-		assert.Equal(test, expectedCode, e.ExitCode())
-		return
-	}
-	// failed to retrieve exit code
-	test.Error("could not get exit code")
+	t.Expect(stdout).HasLength(0)
+	t.Expect(stderr).HasLength(1)
 }

@@ -10,63 +10,50 @@ import (
 
 // Log levels
 const (
-	LogLevelTrace = iota
-	LogLevelDebug = iota
-	LogLevelInfo  = iota
-	LogLevelWarn  = iota
-	LogLevelError = iota
-	LogLevelFatal = iota
-	LogLevelQuiet = iota
+	LevelTrace int = iota
+	LevelDebug int = iota
+	LevelInfo  int = iota
+	LevelWarn  int = iota
+	LevelError int = iota
+	LevelFatal int = iota
+	LevelQuiet int = iota
+)
+
+// Defaults
+const (
+	ISO8601 = "01-02-2006 15:04:05 MST"
 )
 
 // printFunc is a function that formats and prints
 type printFunc func(string, ...interface{})
 
-// Level specifies the message types and severity
-type Level uint8
-
 // Logger is an object for logging
 type Logger struct {
-	Level         Level
 	Name          string
-	LogFormat     format.Factory
-	TimeFormat    string
+	Level         int
 	HasColor      bool
+	TimeFormat    string
 	MaxNameLength int
 	Stdout        *os.File
 	Stderr        *os.File
+	format        format.Factory
 }
 
 // NewLogger returns a new logger with the specified minimum logging level
 func NewLogger() *Logger {
 	return &Logger{
-		Level:         LogLevelDebug,
-		TimeFormat:    "01-02-2006 15:04:05 MST",
 		HasColor:      true,
+		Level:         LevelDebug,
+		TimeFormat:    ISO8601,
 		MaxNameLength: 15,
-		LogFormat:     format.FactoryOf(format.Flat()),
 		Stdout:        os.Stdout,
 		Stderr:        os.Stderr,
+		format:        format.Flat,
 	}
 }
 
-// SetTimeFormat sets the time format
-func (log *Logger) SetTimeFormat(timeFormat string) {
-	log.TimeFormat = timeFormat
-}
-
-// SetName overrides the caller name
-func (log *Logger) SetName(name string) {
-	log.Name = name
-}
-
-// SetLevel sets the logging level
-func (log *Logger) SetLevel(level Level) {
-	log.Level = level
-}
-
-// getName returns the name of the logger or its caller
-func (log *Logger) getName() string {
+// name returns the name of the logger or of its caller
+func (log *Logger) name() string {
 	if len(log.Name) > 0 {
 		return log.Name
 	}
@@ -74,62 +61,62 @@ func (log *Logger) getName() string {
 	return caller.Shorten(caller.GetName(4), log.MaxNameLength)
 }
 
-// createMessage returns a new message
-func (log *Logger) createMessage() *Message {
+// message returns a new message
+func (log *Logger) message() *Message {
 	msg := &Message{
 		sep:       " :: ",
 		time:      time.Now().Format(log.TimeFormat),
-		name:      log.getName(),
-		format:    log.LogFormat(),
+		name:      log.name(),
 		stdout:    log.Stdout,
 		stderr:    log.Stderr,
 		hasColor:  log.HasColor,
 		threshold: log.Level,
+		format:    log.format(),
 	}
 	return msg
 }
 
 // Field adds a data field to the log
 func (log *Logger) Field(name string, value interface{}) *Message {
-	return log.createMessage().Field(name, value)
+	return log.message().Field(name, value)
 }
 
 // Trace logs a message with level Trace
 func (log *Logger) Trace(format string, args ...interface{}) {
-	log.createMessage().Trace(format, args...)
+	log.message().Trace(format, args...)
 }
 
 // Debug logs a message with level Debug
 func (log *Logger) Debug(format string, args ...interface{}) {
-	log.createMessage().Debug(format, args...)
+	log.message().Debug(format, args...)
 }
 
 // Info logs a message with level Info
 func (log *Logger) Info(format string, args ...interface{}) {
-	log.createMessage().Info(format, args...)
+	log.message().Info(format, args...)
 }
 
 // Warn logs a message with level Warn
 func (log *Logger) Warn(format string, args ...interface{}) {
-	log.createMessage().Warn(format, args...)
+	log.message().Warn(format, args...)
 }
 
 // Error logs a message with level Error
 func (log *Logger) Error(format string, args ...interface{}) {
-	log.createMessage().Error(format, args...)
+	log.message().Error(format, args...)
 }
 
 // Exit logs an error and exits with the given code
 func (log *Logger) Exit(code int, format string, args ...interface{}) {
-	log.createMessage().Exit(code, format, args...)
+	log.message().Exit(code, format, args...)
 }
 
 // Fatal logs an error and exits with code 1
 func (log *Logger) Fatal(format string, args ...interface{}) {
-	log.createMessage().Fatal(format, args...)
+	log.message().Fatal(format, args...)
 }
 
 // Panic logs an error and panics
 func (log *Logger) Panic(format string, args ...interface{}) {
-	log.createMessage().Panic(format, args...)
+	log.message().Panic(format, args...)
 }

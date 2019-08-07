@@ -21,7 +21,7 @@ tasks:
   install-hooks:
     desc: Setup Git hooks
     cmds:
-      - | 
+      - |
         for file in $(ls hooks/*);
         do 
           filename="${file##*/}";

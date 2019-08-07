@@ -1,5 +1,6 @@
 # Captain's Log
 
+[![Build Status](https://vincentofearth.visualstudio.com/captainslog/_apis/build/status/vincentfiestada.captainslog?branchName=dev)](https://vincentofearth.visualstudio.com/captainslog/_build/latest?definitionId=5&branchName=dev)
 [![GoReportCard](https://goreportcard.com/badge/github.com/vincentfiestada/captainslog)](https://goreportcard.com/report/github.com/vincentfiestada/captainslog)
 [![GoDoc](https://godoc.org/github.com/vincentfiestada/captainslog?status.svg)](https://godoc.org/github.com/vincentfiestada/captainslog)
 [![Conventional Commits](https://img.shields.io/badge/commits-conventional-00b6ff.svg?labelColor=1F6CB4)](https://conventionalcommits.org)

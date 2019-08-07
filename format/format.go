@@ -9,10 +9,3 @@ type Format interface {
 
 // Factory is a function that returns a format specifier
 type Factory func() Format
-
-// FactoryOf creates a factory method for a format specifier
-func FactoryOf(product Format) Factory {
-	return func() Format {
-		return product
-	}
-}

@@ -8,7 +8,7 @@ type FlatFormat struct {
 }
 
 // Flat returns a new flat format specifier
-func Flat() *FlatFormat {
+func Flat() Format {
 	return &FlatFormat{}
 }
 
