@@ -28,13 +28,13 @@ type Level uint8
 // Logger is an object for logging
 type Logger struct {
 	Level         Level
-	Name          string
 	LogFormat     format.Factory
 	TimeFormat    string
 	HasColor      bool
 	MaxNameLength int
 	Stdout        *os.File
 	Stderr        *os.File
+	name          string
 }
 
 // NewLogger returns a new logger with the specified minimum logging level
@@ -57,7 +57,7 @@ func (log *Logger) SetTimeFormat(timeFormat string) {
 
 // SetName overrides the caller name
 func (log *Logger) SetName(name string) {
-	log.Name = name
+	log.name = name
 }
 
 // SetLevel sets the logging level
@@ -65,10 +65,10 @@ func (log *Logger) SetLevel(level Level) {
 	log.Level = level
 }
 
-// getName returns the name of the logger or its caller
-func (log *Logger) getName() string {
-	if len(log.Name) > 0 {
-		return log.Name
+// etName returns the name of the logger or its caller
+func (log *Logger) GetName() string {
+	if len(log.name) > 0 {
+		return log.name
 	}
 	// if the logger has no name, return the name of the caller
 	return caller.Shorten(caller.GetName(4), log.MaxNameLength)
@@ -79,7 +79,7 @@ func (log *Logger) createMessage() *Message {
 	msg := &Message{
 		sep:       " :: ",
 		time:      time.Now().Format(log.TimeFormat),
-		name:      log.getName(),
+		name:      log.GetName(),
 		format:    log.LogFormat(),
 		stdout:    log.Stdout,
 		stderr:    log.Stderr,

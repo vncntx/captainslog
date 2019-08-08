@@ -124,6 +124,16 @@ func TestPanic(test *testing.T) {
 	log.Panic("test %d", 1)
 }
 
+func TestSetName(test *testing.T) {
+	t := unit{test}
+
+	log := captainslog.NewLogger()
+	log.SetName("captain")
+
+	// should set the name
+	assert.Equal(t, "captain", log.GetName())
+}
+
 func TestSetTimeFormat(test *testing.T) {
 	t := unit{test}
 
