@@ -16,8 +16,8 @@ type Message struct {
 	name      string
 	text      string
 	sep       string
-	level     Level
-	threshold Level
+	level     uint8
+	threshold uint8
 	format    format.Format
 	hasColor  bool
 	stdout    *os.File
@@ -25,7 +25,7 @@ type Message struct {
 }
 
 // SetLevel sets the priority level for the message
-func (msg *Message) SetLevel(level Level) {
+func (msg *Message) SetLevel(level uint8) {
 	msg.level = level
 }
 
@@ -85,7 +85,7 @@ func (msg *Message) Field(name string, value interface{}) *Message {
 }
 
 // Log outputs the message with the specified level
-func (msg *Message) Log(level Level, format string, args ...interface{}) {
+func (msg *Message) Log(level uint8, format string, args ...interface{}) {
 	msg.SetLevel(level)
 	msg.text = fmt.Sprintf(format, args...)
 	msg.print()

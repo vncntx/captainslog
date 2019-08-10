@@ -10,24 +10,27 @@ import (
 
 // Log levels
 const (
-	LogLevelTrace = iota
-	LogLevelDebug = iota
-	LogLevelInfo  = iota
-	LogLevelWarn  = iota
-	LogLevelError = iota
-	LogLevelFatal = iota
-	LogLevelQuiet = iota
+	LogLevelTrace uint8 = iota
+	LogLevelDebug uint8 = iota
+	LogLevelInfo  uint8 = iota
+	LogLevelWarn  uint8 = iota
+	LogLevelError uint8 = iota
+	LogLevelFatal uint8 = iota
+	LogLevelQuiet uint8 = iota
+)
+
+// Defaults
+const (
+	DefaultTimeFormat    = "01-02-2006 15:04:05 MST"
+	DefaultMaxNameLength = 15
 )
 
 // printFunc is a function that formats and prints
 type printFunc func(string, ...interface{})
 
-// Level specifies the message types and severity
-type Level uint8
-
 // Logger is an object for logging
 type Logger struct {
-	Level         Level
+	Level         uint8
 	LogFormat     format.Factory
 	TimeFormat    string
 	HasColor      bool
@@ -40,19 +43,14 @@ type Logger struct {
 // NewLogger returns a new logger with the specified minimum logging level
 func NewLogger() *Logger {
 	return &Logger{
-		Level:         LogLevelDebug,
-		TimeFormat:    "01-02-2006 15:04:05 MST",
 		HasColor:      true,
-		MaxNameLength: 15,
+		Level:         LogLevelDebug,
+		TimeFormat:    DefaultTimeFormat,
+		MaxNameLength: DefaultMaxNameLength,
 		LogFormat:     format.FactoryOf(format.Flat()),
 		Stdout:        os.Stdout,
 		Stderr:        os.Stderr,
 	}
-}
-
-// SetTimeFormat sets the time format
-func (log *Logger) SetTimeFormat(timeFormat string) {
-	log.TimeFormat = timeFormat
 }
 
 // SetName overrides the caller name
@@ -60,12 +58,7 @@ func (log *Logger) SetName(name string) {
 	log.name = name
 }
 
-// SetLevel sets the logging level
-func (log *Logger) SetLevel(level Level) {
-	log.Level = level
-}
-
-// etName returns the name of the logger or its caller
+// GetName returns the name of the logger or its caller
 func (log *Logger) GetName() string {
 	if len(log.name) > 0 {
 		return log.name
