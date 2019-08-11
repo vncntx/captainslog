@@ -1,3 +1,5 @@
+![](./logo.png)
+
 # Captain's Log
 
 [![Build Status](https://vincentofearth.visualstudio.com/captainslog/_apis/build/status/vincentfiestada.captainslog?branchName=dev)](https://vincentofearth.visualstudio.com/captainslog/_build/latest?definitionId=5&branchName=dev)
@@ -11,6 +13,7 @@ A simple logging library for [Go](https://golang.org/).
 - Support for multiple logging levels
 - Colored output, even on Windows
 - Print the calling function name
+- Enables structured logging
 
 ![Screenshot of captainslog in action](./assets/screenshot.png)
 
