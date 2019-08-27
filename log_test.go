@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/vincentfiestada/captainslog"
+	"github.com/vincentfiestada/captainslog/levels"
 	"github.com/vincentfiestada/captainslog/preflight"
 )
 
@@ -16,7 +17,7 @@ const (
 
 func getLogger() *captainslog.Logger {
 	log := captainslog.NewLogger()
-	log.Level = captainslog.LevelTrace
+	log.Level = levels.Trace
 	return log
 }
 
@@ -30,9 +31,8 @@ func TestNewLogger(test *testing.T) {
 
 	// should use default values
 	t.Expect(log.HasColor).Is().EqualTo(true)
-	t.Expect(log.Level).Equals(captainslog.LevelDebug)
+	t.Expect(log.Level).Equals(levels.Debug)
 	t.Expect(log.TimeFormat).Equals(captainslog.ISO8601)
-	t.Expect(log.MaxNameLength).Equals(15)
 	t.Expect(log.Stdout).Equals(os.Stdout)
 	t.Expect(log.Stderr).Equals(os.Stderr)
 }
@@ -174,7 +174,7 @@ func TestLevels(test *testing.T) {
 		log := getLogger()
 		log.Stdout = stdout
 		log.Stderr = stderr
-		log.Level = captainslog.LevelWarn
+		log.Level = levels.Warn
 
 		log.Info("x")
 		log.Warn("x")

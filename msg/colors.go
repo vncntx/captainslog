@@ -1,8 +1,11 @@
-package captainslog
+package msg
 
 import (
 	"github.com/fatih/color"
 )
+
+// Color adds color codes to a string
+type Color func(string, ...interface{}) string
 
 // Color print functions
 var (

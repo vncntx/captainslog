@@ -16,6 +16,8 @@ type Expectation interface {
 
 	// Assertions
 	Nil()
+	True()
+	False()
 	Empty()
 	HasLength(expected int)
 	HaveLength(expected int)

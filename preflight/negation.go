@@ -45,6 +45,16 @@ func (not *Negation) Nil() {
 	not.Equals(nil)
 }
 
+// True asserts the value is true
+func (not *Negation) True() {
+	not.Equals(true)
+}
+
+// False asserts the value is false
+func (not *Negation) False() {
+	not.Equals(false)
+}
+
 // Empty asserts the value is an array with length != 0
 func (not *Negation) Empty() {
 	not.HasLength(0)

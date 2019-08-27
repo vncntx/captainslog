@@ -1,31 +1,39 @@
 package format
 
-import "fmt"
+import (
+	"fmt"
+	"os"
 
-// FlatFormat specifies a simple, flat list of fields
-type FlatFormat struct {
-	fields string
-}
+	"github.com/vincentfiestada/captainslog/msg"
+)
 
-// Flat returns a new flat format specifier
-func Flat() Format {
-	return &FlatFormat{}
-}
-
-// AddField appends a field into the list
-func (format *FlatFormat) AddField(name string, value interface{}) {
-	if format.fields != "" {
-		format.fields += " "
+// Flat formats a message as flat text
+func Flat(msg *msg.Message) {
+	stream, level, colorize := msg.Props()
+	if !msg.HasColor {
+		colorize = fmt.Sprintf
 	}
-	format.fields += fmt.Sprintf("%s=%#v", name, value)
+
+	write(stream, colorize("%6s", level))
+	separate(stream)
+	write(stream, msg.Time)
+	separate(stream)
+	write(stream, colorize(msg.Name))
+	if len(msg.Fields) > 0 {
+		separate(stream)
+		for i := 0; i < len(msg.Fields)-1; i += 2 {
+			if i > 0 {
+				write(stream, ", ")
+			}
+			write(stream, fmt.Sprintf("%s=%#v", msg.Fields[i], msg.Fields[i+1]))
+		}
+	}
+	separate(stream)
+	write(stream, msg.Text)
+	write(stream, "\n")
 }
 
-// GetFields returns fields as a flat list
-func (format *FlatFormat) GetFields() string {
-	return format.fields
-}
-
-// IsEmpty returns true if no fields have been added
-func (format *FlatFormat) IsEmpty() bool {
-	return format.fields == ""
+// separate prints out a separator between parts of the message
+func separate(stream *os.File) {
+	write(stream, " :: ")
 }
