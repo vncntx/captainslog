@@ -56,6 +56,16 @@ func (e *ValueExpectation) Nil() {
 	e.Equals(nil)
 }
 
+// True asserts the value is true
+func (e *ValueExpectation) True() {
+	e.Equals(true)
+}
+
+// False asserts the value is false
+func (e *ValueExpectation) False() {
+	e.Equals(false)
+}
+
 // Empty asserts the value has length 0
 func (e *ValueExpectation) Empty() {
 	e.HasLength(0)
@@ -76,7 +86,7 @@ func (e *ValueExpectation) HaveLength(expected int) {
 // Equals asserts equality to an expected value
 func (e *ValueExpectation) Equals(expected interface{}) {
 	if e.Actual != expected {
-		e.Errorf("%s: %v != %v", e.Name(), expected, e.Actual)
+		e.Errorf("%s: %#v != %#v", e.Name(), expected, e.Actual)
 	}
 }
 

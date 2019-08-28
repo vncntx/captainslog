@@ -6,17 +6,8 @@ import (
 
 	"github.com/vincentfiestada/captainslog/caller"
 	"github.com/vincentfiestada/captainslog/format"
-)
-
-// Log levels
-const (
-	LevelTrace int = iota
-	LevelDebug int = iota
-	LevelInfo  int = iota
-	LevelWarn  int = iota
-	LevelError int = iota
-	LevelFatal int = iota
-	LevelQuiet int = iota
+	"github.com/vincentfiestada/captainslog/levels"
+	"github.com/vincentfiestada/captainslog/msg"
 )
 
 // Defaults
@@ -29,26 +20,26 @@ type printFunc func(string, ...interface{})
 
 // Logger is an object for logging
 type Logger struct {
-	Name          string
-	Level         int
-	HasColor      bool
-	TimeFormat    string
-	MaxNameLength int
-	Stdout        *os.File
-	Stderr        *os.File
-	format        format.Factory
+	Name       string
+	Level      int
+	HasColor   bool
+	TimeFormat string
+	NameCutoff int
+	Stdout     *os.File
+	Stderr     *os.File
+	format     msg.Printer
 }
 
 // NewLogger returns a new logger with the specified minimum logging level
 func NewLogger() *Logger {
 	return &Logger{
-		HasColor:      true,
-		Level:         LevelDebug,
-		TimeFormat:    ISO8601,
-		MaxNameLength: 15,
-		Stdout:        os.Stdout,
-		Stderr:        os.Stderr,
-		format:        format.Flat,
+		HasColor:   true,
+		Level:      levels.Debug,
+		TimeFormat: ISO8601,
+		NameCutoff: 15,
+		Stdout:     os.Stdout,
+		Stderr:     os.Stderr,
+		format:     format.Flat,
 	}
 }
 
@@ -58,26 +49,25 @@ func (log *Logger) name() string {
 		return log.Name
 	}
 	// if the logger has no name, return the name of the caller
-	return caller.Shorten(caller.GetName(4), log.MaxNameLength)
+	return caller.Shorten(caller.GetName(4), log.NameCutoff)
 }
 
 // message returns a new message
-func (log *Logger) message() *Message {
-	msg := &Message{
-		sep:       " :: ",
-		time:      time.Now().Format(log.TimeFormat),
-		name:      log.name(),
-		stdout:    log.Stdout,
-		stderr:    log.Stderr,
-		hasColor:  log.HasColor,
-		threshold: log.Level,
-		format:    log.format(),
+func (log *Logger) message() *msg.Message {
+	return &msg.Message{
+		Time:      time.Now().Format(log.TimeFormat),
+		Name:      log.name(),
+		Stdout:    log.Stdout,
+		Stderr:    log.Stderr,
+		HasColor:  log.HasColor,
+		Threshold: log.Level,
+		Format:    log.format,
+		Fields:    []interface{}{},
 	}
-	return msg
 }
 
 // Field adds a data field to the log
-func (log *Logger) Field(name string, value interface{}) *Message {
+func (log *Logger) Field(name string, value interface{}) *msg.Message {
 	return log.message().Field(name, value)
 }
 

@@ -1,13 +1,16 @@
 package main
 
-import "github.com/vincentfiestada/captainslog"
+import (
+	"github.com/vincentfiestada/captainslog"
+	"github.com/vincentfiestada/captainslog/levels"
+)
 
 var log *captainslog.Logger
 
 func init() {
 	log = captainslog.NewLogger()
 	log.Name = "captainslog"
-	log.Level = captainslog.LevelTrace
+	log.Level = levels.Trace
 }
 
 func main() {

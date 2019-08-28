@@ -18,6 +18,10 @@ tasks:
     desc: Check code quality
     cmds:
       - go vet .
+  demo:
+    desc: See captainslog in action
+    cmds:
+      - go run ./demo
   install-hooks:
     desc: Setup Git hooks
     cmds:
