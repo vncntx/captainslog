@@ -83,11 +83,19 @@ func TestPanic(test *testing.T) {
 	message.Panic("x")
 }
 
+func TestField(test *testing.T) {
+	t := preflight.Unit(test)
+
+	message := createMessage(levels.Info)
+	message.Field("science officer", "data")
+
+	t.Expect(message.Data).HasLength(2)
+}
+
 func TestFields(test *testing.T) {
 	t := preflight.Unit(test)
 
 	message := createMessage(levels.Info)
-
 	message.Fields(
 		msg.Field{"science officer", "data"},
 		msg.Field{"chief engineer", "geordi la forge"},

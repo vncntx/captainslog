@@ -71,7 +71,12 @@ func (log *Logger) I(name string, value interface{}) msg.Field {
 	return msg.Field{name, value}
 }
 
-// Fields adds multiple fields to the log
+// Field creates a message with a data field
+func (log *Logger) Field(name string, value interface{}) *msg.Message {
+	return log.message().Field(name, value)
+}
+
+// Fields creates a message with multiple data fields
 func (log *Logger) Fields(fields ...msg.Field) *msg.Message {
 	return log.message().Fields(fields...)
 }

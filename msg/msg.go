@@ -43,7 +43,13 @@ func (msg *Message) Props() (stream *os.File, level string, color Color) {
 	}
 }
 
-// Fields adds multiple fields to the log
+// Field adds a data field to the message
+func (msg *Message) Field(name string, value interface{}) *Message {
+	msg.Data = append(msg.Data, name, value)
+	return msg
+}
+
+// Fields adds multiple fields to the message
 func (msg *Message) Fields(fields ...Field) *Message {
 	for _, field := range fields {
 		msg.Data = append(msg.Data, field[0], field[1])

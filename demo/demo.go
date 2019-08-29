@@ -20,29 +20,19 @@ func main() {
 	log.Warn("%d", 4)
 	log.Error("%d", 5)
 
-	log.Fields(
-		log.I("captain", "picard"),
-	).Trace("starship enterprise")
-
-	log.Fields(
-		log.I("captain", "picard"),
-	).Debug("starship enterprise")
-
-	log.Fields(
-		log.I("captain", "picard"),
-	).Info("starship enterprise")
-
-	log.Fields(
-		log.I("captain", "picard"),
-	).Warn("starship enterprise")
-
-	log.Fields(
-		log.I("captain", "picard"),
-	).Error("starship enterprise")
+	log.Field("captain", "picard").Trace("starship enterprise")
+	log.Field("captain", "picard").Debug("starship enterprise")
+	log.Field("captain", "picard").Info("starship enterprise")
+	log.Field("captain", "picard").Warn("starship enterprise")
+	log.Field("captain", "picard").Error("starship enterprise")
 
 	log.Fields(
 		log.I("captain", "picard"),
 		log.I("first officer", "riker"),
+		log.I("science officer", "data"),
+		log.I("medical officer", "crusher"),
+		log.I("chief engineer", "la forge"),
+		log.I("security officer", "worf"),
 	).Info("starship enterprise")
 
 }
