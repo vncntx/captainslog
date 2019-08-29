@@ -8,6 +8,9 @@ import (
 	"github.com/vincentfiestada/captainslog/preflight"
 )
 
+// Field is a key-value pair
+type Field [2]interface{}
+
 // Message is a log message that gets built in multiple steps
 type Message struct {
 	Time      string
@@ -19,14 +22,14 @@ type Message struct {
 	Stdout    *os.File
 	Stderr    *os.File
 	Format    Printer
-	Fields    []interface{}
+	Data      []interface{}
 }
 
 // Props returns the message stream, level, and color
 func (msg *Message) Props() (stream *os.File, level string, color Color) {
 	switch msg.Level {
 	case levels.Trace:
-		return msg.Stdout, "trace", purple
+		return msg.Stdout, "trace", cyan
 	case levels.Debug:
 		return msg.Stdout, "debug", green
 	case levels.Info:
@@ -40,9 +43,17 @@ func (msg *Message) Props() (stream *os.File, level string, color Color) {
 	}
 }
 
-// Field adds a data field to the log
+// Field adds a data field to the message
 func (msg *Message) Field(name string, value interface{}) *Message {
-	msg.Fields = append(msg.Fields, name, value)
+	msg.Data = append(msg.Data, name, value)
+	return msg
+}
+
+// Fields adds multiple fields to the message
+func (msg *Message) Fields(fields ...Field) *Message {
+	for _, field := range fields {
+		msg.Data = append(msg.Data, field[0], field[1])
+	}
 	return msg
 }
 

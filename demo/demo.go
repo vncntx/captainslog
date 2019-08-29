@@ -26,4 +26,13 @@ func main() {
 	log.Field("captain", "picard").Warn("starship enterprise")
 	log.Field("captain", "picard").Error("starship enterprise")
 
+	log.Fields(
+		log.I("captain", "picard"),
+		log.I("first officer", "riker"),
+		log.I("science officer", "data"),
+		log.I("medical officer", "crusher"),
+		log.I("chief engineer", "la forge"),
+		log.I("security officer", "worf"),
+	).Info("starship enterprise")
+
 }

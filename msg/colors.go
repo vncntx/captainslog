@@ -9,7 +9,7 @@ type Color func(string, ...interface{}) string
 
 // Color print functions
 var (
-	purple = color.New(color.FgMagenta).SprintfFunc()
+	cyan   = color.New(color.FgCyan).SprintfFunc()
 	blue   = color.New(color.FgBlue).SprintfFunc()
 	green  = color.New(color.FgGreen).SprintfFunc()
 	yellow = color.New(color.FgYellow).SprintfFunc()

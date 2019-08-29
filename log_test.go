@@ -152,7 +152,7 @@ func TestPanic(test *testing.T) {
 	logs[0].Level.Equals("fatal")
 }
 
-func TestFields(test *testing.T) {
+func TestField(test *testing.T) {
 	t := preflight.Unit(test)
 
 	logs, _ := t.CaptureLogs(func(stdout *os.File, stderr *os.File) {
@@ -161,6 +161,23 @@ func TestFields(test *testing.T) {
 		log.Stderr = stderr
 
 		log.Field("captain", "picard").Info("energize")
+	})
+
+	logs[0].Message.Equals("energize")
+	logs[0].Fields.Equals("captain=\"picard\"")
+}
+
+func TestFields(test *testing.T) {
+	t := preflight.Unit(test)
+
+	logs, _ := t.CaptureLogs(func(stdout *os.File, stderr *os.File) {
+		log := getLogger()
+		log.Stdout = stdout
+		log.Stderr = stderr
+
+		log.Fields(
+			log.I("captain", "picard"),
+		).Info("energize")
 	})
 
 	logs[0].Message.Equals("energize")

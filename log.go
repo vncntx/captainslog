@@ -62,13 +62,23 @@ func (log *Logger) message() *msg.Message {
 		HasColor:  log.HasColor,
 		Threshold: log.Level,
 		Format:    log.format,
-		Fields:    []interface{}{},
+		Data:      []interface{}{},
 	}
 }
 
-// Field adds a data field to the log
+// I returns a key-value pair
+func (log *Logger) I(name string, value interface{}) msg.Field {
+	return msg.Field{name, value}
+}
+
+// Field creates a message with a data field
 func (log *Logger) Field(name string, value interface{}) *msg.Message {
 	return log.message().Field(name, value)
+}
+
+// Fields creates a message with multiple data fields
+func (log *Logger) Fields(fields ...msg.Field) *msg.Message {
+	return log.message().Fields(fields...)
 }
 
 // Trace logs a message with level Trace
