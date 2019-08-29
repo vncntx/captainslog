@@ -19,13 +19,13 @@ func Flat(msg *msg.Message) {
 	write(stream, msg.Time)
 	separate(stream)
 	write(stream, colorize(msg.Name))
-	if len(msg.Fields) > 0 {
+	if len(msg.Data) > 0 {
 		separate(stream)
-		for i := 0; i < len(msg.Fields)-1; i += 2 {
+		for i := 0; i < len(msg.Data)-1; i += 2 {
 			if i > 0 {
 				write(stream, ", ")
 			}
-			write(stream, fmt.Sprintf("%s=%#v", msg.Fields[i], msg.Fields[i+1]))
+			write(stream, fmt.Sprintf("%s=%#v", msg.Data[i], msg.Data[i+1]))
 		}
 	}
 	separate(stream)

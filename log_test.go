@@ -160,7 +160,9 @@ func TestFields(test *testing.T) {
 		log.Stdout = stdout
 		log.Stderr = stderr
 
-		log.Field("captain", "picard").Info("energize")
+		log.Fields(
+			log.I("captain", "picard"),
+		).Info("energize")
 	})
 
 	logs[0].Message.Equals("energize")

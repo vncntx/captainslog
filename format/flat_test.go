@@ -22,7 +22,7 @@ func TestFlat(test *testing.T) {
 			Threshold: levels.Info,
 			Stdout:    stdout,
 			Format:    format.Flat,
-			Fields: []interface{}{
+			Data: []interface{}{
 				"captain",
 				"picard",
 				"first officer",

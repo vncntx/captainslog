@@ -42,7 +42,7 @@ func TestLogs(test *testing.T) {
 
 	message.Format = func(input *msg.Message) {
 		t.Expect(input).Equals(message)
-		t.Expect(input.Fields).HasLength(0)
+		t.Expect(input.Data).HasLength(0)
 	}
 
 	message.Trace("captainslog")
@@ -88,10 +88,12 @@ func TestFields(test *testing.T) {
 
 	message := createMessage(levels.Info)
 
-	message.Field("science officer", "data")
-	message.Field("chief engineer", "geordi la forge")
+	message.Fields(
+		msg.Field{"science officer", "data"},
+		msg.Field{"chief engineer", "geordi la forge"},
+	)
 
-	t.Expect(message.Fields).HasLength(4)
+	t.Expect(message.Data).HasLength(4)
 }
 
 /**
@@ -106,6 +108,6 @@ func createMessage(level int) *msg.Message {
 		Stdout:    os.Stdout,
 		Stderr:    os.Stderr,
 		Format:    format.Flat,
-		Fields:    []interface{}{},
+		Data:      []interface{}{},
 	}
 }
