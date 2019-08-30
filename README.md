@@ -8,12 +8,12 @@
 [![Conventional Commits](https://img.shields.io/badge/commits-conventional-00b6ff.svg?labelColor=1F6CB4)](https://conventionalcommits.org)
 [![License: BSD-3](https://img.shields.io/github/license/vincentfiestada/captainslog.svg?labelColor=1F6CB4&color=00b6ff)](https://github.com/vincentfiestada/captainslog/blob/master/LICENSE)
 
-A simple logging library for [Go](https://golang.org/).
+A simple logging library for [Go](https://golang.org/)
 
-- Support for multiple logging levels
-- Colored output, even on Windows
-- Print the calling function name
-- Enables structured logging
+- Multiple levels
+- Structured logging
+- Output with colors
+- Detect the calling function name
 
 ![Screenshot of captainslog in action](./assets/screenshot.png)
 
@@ -23,24 +23,30 @@ A simple logging library for [Go](https://golang.org/).
 package main
 
 import (
-	"math"
-
 	"github.com/vincentfiestada/captainslog"
 )
 
-var log *captainslog.Logger
+var log = captainslog.NewLogger()
 
 func main() {
-	log.Info("π = %v", math.Pi)
-}
 
-func init() {
-	log = captainslog.NewLogger()
-}
+	log.Debug("this is %s", "captainslog")
 
+	log.Fields(
+
+		log.I("captain",          "picard"),
+		log.I("first officer", 	  "riker"),
+		log.I("science officer",  "data"),
+		log.I("medical officer",  "crusher"),
+		log.I("chief engineer",   "la forge"),
+		log.I("security officer", "worf"),
+
+	).Info("starship enterprise")
+
+}
 ```
 
-The logging levels supported, in decreasing order of priority, are Fatal, Error, Warn, Info, Debug, and Trace.
+The following logging levels are supported by **captainslog**: Fatal, Error, Warn, Info, Debug, and Trace. It provides a fully customizable Logger and makes it easy to do structured logging.
 
 ## Development
 

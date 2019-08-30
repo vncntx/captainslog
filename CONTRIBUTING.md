@@ -1,6 +1,6 @@
 # Contribution Guide
 
-Please [contact the author](mailto:vincentfiestada@outlook.com) if you have any questions or want to help out.
+Please [contact the author](mailto:vincent@vincent.click) if you have any questions or want to help out.
 
 ## Style
 
