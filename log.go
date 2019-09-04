@@ -66,17 +66,17 @@ func (log *Logger) message() *msg.Message {
 	}
 }
 
-// I returns a key-value pair
+// I returns a single field that can be added to logs
 func (log *Logger) I(name string, value interface{}) msg.Field {
 	return msg.Field{name, value}
 }
 
-// Field creates a message with a data field
+// Field starts a message with a data field
 func (log *Logger) Field(name string, value interface{}) *msg.Message {
 	return log.message().Field(name, value)
 }
 
-// Fields creates a message with multiple data fields
+// Fields starts a message with multiple data fields
 func (log *Logger) Fields(fields ...msg.Field) *msg.Message {
 	return log.message().Fields(fields...)
 }

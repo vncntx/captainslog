@@ -10,14 +10,16 @@
 
 A simple logging library for [Go](https://golang.org/)
 
+- Colors
 - Multiple levels
 - Structured logging
-- Output with colors
-- Detect the calling function name
+- Function name detection
 
 ![Screenshot of captainslog in action](./assets/screenshot.png)
 
 ## Usage
+
+This library is designed to provide a familiar yet powerful interface for logging. Each logging method accepts a format string and arguments. Structured logging is supported right out of the box. The Logger allows you to turn colors on/off, specify a datetime format, set the logging threshold, and even provide your own function to control how logs are written.
 
 ```go
 package main
@@ -30,7 +32,11 @@ var log = captainslog.NewLogger()
 
 func main() {
 
+	log.Trace("this is %s", "captainslog")
 	log.Debug("this is %s", "captainslog")
+	log.Info("this is %s", "captainslog")
+	log.Warn("this is %s", "captainslog")
+	log.Error("this is %s", "captainslog")
 
 	log.Fields(
 
@@ -46,9 +52,9 @@ func main() {
 }
 ```
 
-The following logging levels are supported by **captainslog**: Fatal, Error, Warn, Info, Debug, and Trace. It provides a fully customizable Logger and makes it easy to do structured logging.
-
 ## Development
+
+Please read the [Contribution Guide](./CONTRIBUTING.md) before you proceed.
 
 This project uses [Task runner](https://taskfile.dev/). List all available tasks by running `task -l`. To get started, run:
 
@@ -56,4 +62,6 @@ This project uses [Task runner](https://taskfile.dev/). List all available tasks
 task install
 ```
 
-<small>Gopher artwork by [Ashley McNamara](https://twitter.com/ashleymcnamara) on [Gopherize.me](https://gopherize.me/gopher/5dcbe4dc48ab6fbf903aae352f8742cb59e7099b)</small>
+## Copyright
+
+Copyright 2019 Vincent Fiestada. This project is released under a BSD-style [license](./LICENSE).

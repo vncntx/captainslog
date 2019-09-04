@@ -10,4 +10,4 @@ This project adheres to the [Conventional Commit](https://www.conventionalcommit
 
 ## Getting Started
 
-The `hooks` directory contains scripts that enforce the style guide and run tests before every commit. You can set them up by running `task install-hooks`.
+The _hooks_ directory contains scripts that enforce the style guide and run tests before every commit. You can set them up by running `task install-hooks`.
