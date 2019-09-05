@@ -1,6 +1,6 @@
 # Contribution Guide
 
-Please [contact the author](mailto:vincentfiestada@outlook.com) if you have any questions or want to help out.
+Please [contact the author](mailto:vincent@vincent.click) if you have any questions or want to help out.
 
 ## Style
 
@@ -10,4 +10,4 @@ This project adheres to the [Conventional Commit](https://www.conventionalcommit
 
 ## Getting Started
 
-The `hooks` directory contains scripts that enforce the style guide and run tests before every commit. You can set them up by running `task install-hooks`.
+The _hooks_ directory contains scripts that enforce the style guide and run tests before every commit. You can set them up by running `task install-hooks`.

@@ -21,6 +21,31 @@ func getLogger() *captainslog.Logger {
 	return log
 }
 
+func Example() {
+	log := captainslog.NewLogger()
+
+	log.Trace("%d", 1)
+	log.Debug("%d", 2)
+	log.Info("%d", 3)
+	log.Warn("%d", 4)
+	log.Error("%d", 5)
+
+	log.Field("captain", "picard").Trace("starship enterprise")
+	log.Field("captain", "picard").Debug("starship enterprise")
+	log.Field("captain", "picard").Info("starship enterprise")
+	log.Field("captain", "picard").Warn("starship enterprise")
+	log.Field("captain", "picard").Error("starship enterprise")
+
+	log.Fields(
+		log.I("captain", "picard"),
+		log.I("first officer", "riker"),
+		log.I("science officer", "data"),
+		log.I("medical officer", "crusher"),
+		log.I("chief engineer", "la forge"),
+		log.I("security officer", "worf"),
+	).Info("starship enterprise")
+}
+
 func TestNewLogger(test *testing.T) {
 	t := preflight.Unit(test)
 
@@ -72,6 +97,29 @@ func TestLogs(test *testing.T) {
 
 	check(stderr[0], "warn", "message 4")
 	check(stderr[1], "error", "message 5")
+}
+
+func ExampleLogger() {
+	log := captainslog.NewLogger()
+
+	// Specify a name to use instead of the calling function
+	log.Name = "picard"
+	// Specify a time format (see https://golang.org/pkg/time/#Time.Format)
+	log.TimeFormat = "Mon 2006 Jan 2 15:04:05"
+	// Turn colors on or off (default: true)
+	log.HasColor = true
+	// Set a maximum length for the name (default: 15)
+	// If the name is too long, captainslog will try
+	// first to remove the path, then the method parent,
+	// then truncate
+	log.NameCutoff = 100
+	// Use the output streams of your choice
+	_, log.Stdout, _ = os.Pipe()
+	_, log.Stderr, _ = os.Pipe()
+
+	// See also the 'captainslog/format' package
+
+	log.Info("engage")
 }
 
 func TestName(test *testing.T) {
@@ -152,6 +200,13 @@ func TestPanic(test *testing.T) {
 	logs[0].Level.Equals("fatal")
 }
 
+func ExampleLogger_Field() {
+	log := captainslog.NewLogger()
+
+	// Perform structured logging by chaining calls to Field()
+	log.Field("phasers", 1).Field("photon torpedos", 1).Warn("weapons locked")
+}
+
 func TestField(test *testing.T) {
 	t := preflight.Unit(test)
 
@@ -165,6 +220,24 @@ func TestField(test *testing.T) {
 
 	logs[0].Message.Equals("energize")
 	logs[0].Fields.Equals("captain=\"picard\"")
+}
+
+func ExampleLogger_Fields() {
+	log := captainslog.NewLogger()
+
+	// log.Fields() makes structured logging easier
+	// through key-value pairs
+	log.Fields(
+		[2]interface{}{"phasers", 1},
+		[2]interface{}{"photon torpedos", 1},
+	).Warn("weapons locked")
+
+	// log.I() conveniently returns a key-value pair
+	log.Fields(
+		log.I("phasers", 1),
+		log.I("photon torpedos", 1),
+	).Warn("weapons locked")
+
 }
 
 func TestFields(test *testing.T) {
