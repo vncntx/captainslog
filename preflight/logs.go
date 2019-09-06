@@ -40,7 +40,7 @@ func ExpectLog(t *testing.T, text string) *LogExpectation {
 
 // colorless removes ANSI color codes from text and returns the color
 func colorless(t *testing.T, text string) string {
-	rxp, err := regexp.Compile("\\x1b\\[[0-9;]*m")
+	rxp, err := regexp.Compile(`\x1b\[[0-9;]*m`)
 	if err != nil {
 		t.Error(err)
 	}

@@ -15,9 +15,6 @@ const (
 	ISO8601 = "01-02-2006 15:04:05 MST"
 )
 
-// printFunc is a function that formats and prints
-type printFunc func(string, ...interface{})
-
 // Logger is an object for logging
 type Logger struct {
 	Name       string
