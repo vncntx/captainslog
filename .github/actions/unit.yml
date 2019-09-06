@@ -6,7 +6,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest]
     steps:
       - name: Set up Go 1.12
         uses: actions/setup-go@v1
@@ -14,20 +14,11 @@ jobs:
           go-version: 1.12
         id: go
 
-			- name: Install Task for Windows
-				if: matrix.os == 'windows-latest'
-				run: |
-					iwr -useb get.scoop.sh | iex
-					scoop bucket add extras
-					scoop install task
+			- name: Turn on Go Modules
+				run: export GO111MODULE=on
 
-			- name: Install Task for macOS
-				if: matrix.os == 'macOS-latest'
-				run: brew install go-task/tap/go-task
-
-			- name: Install Task for Linux
-				if: matrix.os == 'ubuntu-latest'
-				run: sudo snap install task
+			- name: Install Task
+				run: curl -sL https://taskfile.dev/install.sh | sh
 
       - name: Check out code
         uses: actions/checkout@v1
