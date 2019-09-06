@@ -3,16 +3,29 @@ package caller_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/vincentfiestada/captainslog/caller"
+	"github.com/vincentfiestada/captainslog/preflight"
 )
 
-func TestGetName(t *testing.T) {
-	assert := assert.New(t)
+func TestGetName(test *testing.T) {
+	t := preflight.Unit(test)
 
-	expected := "github.com/vincentfiestada/captainslog/caller_test.TestGetName"
-	assert.Equal(expected, caller.GetName(1))
+	// GetName(1) should return the name of the calling function
+	this := "github.com/vincentfiestada/captainslog/caller_test.TestGetName"
+	t.Expect(caller.GetName(1)).Equals(this)
+
 	func() {
-		assert.Equal(expected, caller.GetName(2))
+		t.Expect(caller.GetName(2)).Equals(this)
 	}()
+}
+
+func TestShorten(test *testing.T) {
+	t := preflight.Unit(test)
+
+	path := "github.com/vincentfiestada/captainslog/caller_test.TestShorten"
+
+	// should return the most specific path possible
+	t.Expect(caller.Shorten(path, 15)).Equals("TestShorten")
+	t.Expect(caller.Shorten(path, 11)).Equals("TestShort..")
+	t.Expect(caller.Shorten(path, 30)).Equals("caller_test.TestShorten")
 }

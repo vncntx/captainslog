@@ -1,174 +1,119 @@
 package captainslog
 
 import (
-	"fmt"
 	"os"
 	"time"
 
 	"github.com/vincentfiestada/captainslog/caller"
-
-	"github.com/fatih/color"
+	"github.com/vincentfiestada/captainslog/format"
+	"github.com/vincentfiestada/captainslog/levels"
+	"github.com/vincentfiestada/captainslog/msg"
 )
 
-// Log levels
+// Defaults
 const (
-	LogLevelTrace = iota
-	LogLevelDebug = iota
-	LogLevelInfo  = iota
-	LogLevelWarn  = iota
-	LogLevelError = iota
-	LogLevelFatal = iota
-	LogLevelQuiet = iota
+	ISO8601 = "01-02-2006 15:04:05 MST"
 )
-
-// Error codes
-const errFatal = 1
-
-// color print functions
-var (
-	pink   = color.New(color.FgMagenta).PrintfFunc()
-	blue   = color.New(color.FgBlue).PrintfFunc()
-	green  = color.New(color.FgGreen).PrintfFunc()
-	yellow = color.New(color.FgYellow).PrintfFunc()
-	red    = color.New(color.FgRed).PrintfFunc()
-)
-
-// printFunc is a function that formats and prints
-type printFunc func(string, ...interface{})
-
-// Level specifies the message types and severity
-type Level uint8
 
 // Logger is an object for logging
 type Logger struct {
-	LogLevel   Level
-	TimeFormat string
 	Name       string
+	Level      int
 	HasColor   bool
-
-	callerDepth int
+	TimeFormat string
+	NameCutoff int
+	Stdout     *os.File
+	Stderr     *os.File
+	format     msg.Printer
 }
 
 // NewLogger returns a new logger with the specified minimum logging level
 func NewLogger() *Logger {
 	return &Logger{
-		LogLevel:    LogLevelDebug,
-		TimeFormat:  "01-02-2006 15:04:05 MST",
-		HasColor:    true,
-		callerDepth: 4,
+		HasColor:   true,
+		Level:      levels.Debug,
+		TimeFormat: ISO8601,
+		NameCutoff: 15,
+		Stdout:     os.Stdout,
+		Stderr:     os.Stderr,
+		format:     format.Flat,
 	}
 }
 
-// SetTimeFormat sets the time format
-func (log *Logger) SetTimeFormat(timeFormat string) {
-	log.TimeFormat = timeFormat
-}
-
-// SetName overrides the caller name
-func (log *Logger) SetName(name string) {
-	log.Name = name
-}
-
-// SetLevel sets the logging level
-func (log *Logger) SetLevel(level Level) {
-	log.LogLevel = level
-}
-
-// Log messages with the specified level
-func (log *Logger) Log(level Level, format string, args ...interface{}) {
-	if level < log.LogLevel {
-		return
-	}
-	var printer printFunc
-	var levelName string
-	switch level {
-	case LogLevelTrace:
-		printer = pink
-		levelName = "trace"
-		break
-	case LogLevelDebug:
-		printer = green
-		levelName = "debug"
-		break
-	case LogLevelInfo:
-		printer = blue
-		levelName = "info"
-		break
-	case LogLevelWarn:
-		printer = yellow
-		levelName = "warn"
-	case LogLevelError:
-		printer = red
-		levelName = "error"
-	default:
-		printer = red
-		levelName = "fatal"
-	}
-	if !log.HasColor {
-		printer = printf
-	}
-	printer("%7s", levelName)
-	printf(" :: %s :: ", time.Now().Format(log.TimeFormat))
-	printer("%s", log.getName())
-	printf(" :: ")
-	printf(format, args...)
-	fmt.Println()
-}
-
-// getName returns the name of the logger or its caller
-func (log *Logger) getName() string {
+// name returns the name of the logger or of its caller
+func (log *Logger) name() string {
 	if len(log.Name) > 0 {
 		return log.Name
 	}
 	// if the logger has no name, return the name of the caller
-	return caller.GetName(log.callerDepth)
+	return caller.Shorten(caller.GetName(4), log.NameCutoff)
 }
 
-// Trace logs messages with level Trace
+// message returns a new message
+func (log *Logger) message() *msg.Message {
+	return &msg.Message{
+		Time:      time.Now().Format(log.TimeFormat),
+		Name:      log.name(),
+		Stdout:    log.Stdout,
+		Stderr:    log.Stderr,
+		HasColor:  log.HasColor,
+		Threshold: log.Level,
+		Format:    log.format,
+		Data:      []interface{}{},
+	}
+}
+
+// I returns a single field that can be added to logs
+func (log *Logger) I(name string, value interface{}) msg.Field {
+	return msg.Field{name, value}
+}
+
+// Field starts a message with a data field
+func (log *Logger) Field(name string, value interface{}) *msg.Message {
+	return log.message().Field(name, value)
+}
+
+// Fields starts a message with multiple data fields
+func (log *Logger) Fields(fields ...msg.Field) *msg.Message {
+	return log.message().Fields(fields...)
+}
+
+// Trace logs a message with level Trace
 func (log *Logger) Trace(format string, args ...interface{}) {
-	log.Log(LogLevelTrace, format, args...)
+	log.message().Trace(format, args...)
 }
 
-// Debug logs messages with level Debug
+// Debug logs a message with level Debug
 func (log *Logger) Debug(format string, args ...interface{}) {
-	log.Log(LogLevelDebug, format, args...)
+	log.message().Debug(format, args...)
 }
 
-// Info logs messages with level Info
+// Info logs a message with level Info
 func (log *Logger) Info(format string, args ...interface{}) {
-	log.Log(LogLevelInfo, format, args...)
+	log.message().Info(format, args...)
 }
 
-// Warn logs messages with level Warn
+// Warn logs a message with level Warn
 func (log *Logger) Warn(format string, args ...interface{}) {
-	log.Log(LogLevelWarn, format, args...)
+	log.message().Warn(format, args...)
 }
 
-// Error logs messages with level Error
+// Error logs a message with level Error
 func (log *Logger) Error(format string, args ...interface{}) {
-	log.Log(LogLevelError, format, args...)
+	log.message().Error(format, args...)
 }
 
-// Exit logs an error and exits with an error code
+// Exit logs an error and exits with the given code
 func (log *Logger) Exit(code int, format string, args ...interface{}) {
-	log.Log(LogLevelFatal, format, args...)
-	os.Exit(code)
+	log.message().Exit(code, format, args...)
 }
 
-// Fatal logs an error and exits with error code 1
+// Fatal logs an error and exits with code 1
 func (log *Logger) Fatal(format string, args ...interface{}) {
-	log.Log(LogLevelFatal, format, args...)
-	os.Exit(errFatal)
+	log.message().Fatal(format, args...)
 }
 
-// Panic log an error and panics
+// Panic logs an error and panics
 func (log *Logger) Panic(format string, args ...interface{}) {
-	msg := fmt.Sprintf(format, args...)
-	log.Log(LogLevelFatal, msg)
-	panic(msg)
-}
-
-// printf a simple colorless print function
-func printf(format string, args ...interface{}) {
-	fmt.Printf(format, args...)
+	log.message().Panic(format, args...)
 }
