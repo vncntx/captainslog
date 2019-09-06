@@ -1,0 +1,15 @@
+name: Style Checks
+on: [push]
+jobs:
+  build:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v1
+
+      - name: Lint source code
+        uses: actions-contrib/golangci-lint@master
+        with:
+          args: run
