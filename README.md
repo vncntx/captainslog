@@ -18,6 +18,12 @@ A simple logging library for [Go](https://golang.org/)
 
 ![Screenshot of captainslog in action](./assets/screenshot.png)
 
+## Installation
+
+```
+go get github.com/vincentfiestada/captainslog
+```
+
 ## Usage
 
 This library is designed to provide a familiar yet powerful interface for logging. Each logging method accepts a format string and arguments. Structured logging is supported right out of the box. The Logger allows you to turn colors on/off, specify a datetime format, set the logging threshold, and even provide your own function to control how logs are written.
