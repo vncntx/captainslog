@@ -3,6 +3,7 @@ package msg
 import (
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/vincentfiestada/captainslog/levels"
 	"github.com/vincentfiestada/captainslog/preflight"
@@ -23,6 +24,13 @@ type Message struct {
 	Stderr    *os.File
 	Format    Printer
 	Data      []interface{}
+}
+
+// MsgPool is a synchronized pool of messages
+var MsgPool = sync.Pool{
+	New: func() interface{} {
+		return &Message{}
+	},
 }
 
 // Props returns the message stream, level, and color
@@ -66,6 +74,8 @@ func (msg *Message) Log(level int, format string, args ...interface{}) {
 
 	msg.Text = fmt.Sprintf(format, args...)
 	msg.Format(msg)
+	// Return message to pool
+	MsgPool.Put(msg)
 }
 
 // Trace outputs the message with level Trace
