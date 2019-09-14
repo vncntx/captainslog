@@ -59,6 +59,10 @@ func main() {
 }
 ```
 
+## Performance
+
+The main goals of this library are convenience and familiarity for programmers. Certain design decisions have a negative impact on performance. Take this into consideration before choosing to use captainslog. You can run these benchmarks using `task benchmark`.
+
 ## Development
 
 Please read the [Contribution Guide](./CONTRIBUTING.md) before you proceed.
