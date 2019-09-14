@@ -10,6 +10,10 @@ tasks:
     desc: Run all tests
     cmds:
       - go test ./... --cover
+  benchmark:
+    desc: Run benchmarks
+    cmds:
+      - go run ./benchmarks/
   format:
     desc: Format Go code
     cmds:
