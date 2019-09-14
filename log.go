@@ -24,7 +24,7 @@ type Logger struct {
 	NameCutoff int
 	Stdout     *os.File
 	Stderr     *os.File
-	format     msg.Printer
+	Format     msg.Printer
 }
 
 // NewLogger returns a new logger with the specified minimum logging level
@@ -36,7 +36,7 @@ func NewLogger() *Logger {
 		NameCutoff: 15,
 		Stdout:     os.Stdout,
 		Stderr:     os.Stderr,
-		format:     format.Flat,
+		Format:     format.Flat,
 	}
 }
 
@@ -51,16 +51,16 @@ func (log *Logger) name() string {
 
 // message returns a new message
 func (log *Logger) message() *msg.Message {
-	return &msg.Message{
-		Time:      time.Now().Format(log.TimeFormat),
-		Name:      log.name(),
-		Stdout:    log.Stdout,
-		Stderr:    log.Stderr,
-		HasColor:  log.HasColor,
-		Threshold: log.Level,
-		Format:    log.format,
-		Data:      []interface{}{},
-	}
+	msg := msg.MsgPool.Get().(*msg.Message)
+	msg.Time = time.Now().Format(log.TimeFormat)
+	msg.Name = log.name()
+	msg.Stdout = log.Stdout
+	msg.Stderr = log.Stderr
+	msg.HasColor = log.HasColor
+	msg.Threshold = log.Level
+	msg.Format = log.Format
+	msg.Data = []interface{}{}
+	return msg
 }
 
 // I returns a single field that can be added to logs

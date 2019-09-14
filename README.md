@@ -2,7 +2,8 @@
 
 # Captain's Log
 
-![](https://github.com/vincentfiestada/captainslog/workflows/Unit%20Tests/badge.svg)
+[![](https://github.com/vincentfiestada/captainslog/workflows/Unit%20Tests/badge.svg)](https://github.com/vincentfiestada/captainslog/actions)
+[![](https://github.com/vincentfiestada/captainslog/workflows/Style%20Checks/badge.svg)](https://github.com/golang/lint)
 [![GoReportCard](https://goreportcard.com/badge/github.com/vincentfiestada/captainslog)](https://goreportcard.com/report/github.com/vincentfiestada/captainslog)
 [![GoDoc](https://godoc.org/github.com/vincentfiestada/captainslog?status.svg)](https://godoc.org/github.com/vincentfiestada/captainslog)
 [![Conventional Commits](https://img.shields.io/badge/commits-conventional-00b6ff.svg?labelColor=1F6CB4)](https://conventionalcommits.org)
@@ -16,6 +17,12 @@ A simple logging library for [Go](https://golang.org/)
 - Function name detection
 
 ![Screenshot of captainslog in action](./assets/screenshot.png)
+
+## Installation
+
+```
+go get github.com/vincentfiestada/captainslog
+```
 
 ## Usage
 
@@ -51,6 +58,10 @@ func main() {
 
 }
 ```
+
+## Performance
+
+The main goals of this library are convenience and familiarity for programmers. Certain design decisions have a negative impact on performance. Take this into consideration before choosing to use captainslog. You can run these benchmarks using `task benchmark`.
 
 ## Development
 
