@@ -61,18 +61,17 @@ func main() {
 
 ## Performance
 
-The main goals of this library are convenience and familiarity for programmers. Certain design decisions have a negative impact on performance. Take this into consideration before choosing to use captainslog. You can run these benchmarks using `task benchmark`.
+The main goals of this library are convenience and familiarity for programmers. Certain design decisions have a negative impact on performance. Take this into consideration before choosing to use captainslog. You can run these benchmarks using `Invoke-Benchmarks`.
 
 ## Development
 
-Please read the [Contribution Guide](./CONTRIBUTING.md) before you proceed.
+Please read the [Contribution Guide](./CONTRIBUTING.md) before you proceed. This project uses [Powershell Core](https://microsoft.com/PowerShell) to run tasks. To get started,
 
-This project uses [Task runner](https://taskfile.dev/). List all available tasks by running `task -l`. To get started, run:
-
-```
-task install
+```ps1
+Import-Module .\tasks.psm1
+Get-Command -Module tasks
 ```
 
 ## Copyright
 
-Copyright 2019 Vincent Fiestada. This project is released under a BSD-style [license](./LICENSE).
+Copyright 2019 [Vincent Fiestada](mailto:vincent@vincent.click). This project is released under a [BSD-style license](./license).
