@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/vincentfiestada/captainslog"
-	"github.com/vincentfiestada/captainslog/format"
+	"github.com/vincentfiestada/captainslog/v2"
+	"github.com/vincentfiestada/captainslog/v2/format"
 )
 
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

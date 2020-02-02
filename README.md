@@ -32,7 +32,7 @@ This library is designed to provide a familiar yet powerful interface for loggin
 package main
 
 import (
-	"github.com/vincentfiestada/captainslog"
+	"github.com/vincentfiestada/captainslog/v2"
 )
 
 var log = captainslog.NewLogger()
@@ -61,7 +61,7 @@ func main() {
 
 ## Performance
 
-The main goals of this library are convenience and familiarity for programmers. Certain design decisions have a negative impact on performance. Take this into consideration before choosing to use captainslog. You can run these benchmarks using `Invoke-Benchmarks`.
+The main goals of this library are convenience and familiarity for programmers. Certain design decisions have a negative impact on performance. Take this into consideration before choosing to use captainslog. To see for yourself, run the benchmarks using `Invoke-Benchmarks`.
 
 ## Development
 
