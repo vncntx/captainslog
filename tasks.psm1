@@ -18,7 +18,7 @@ Function Install-Project {
 		Write-Warning "failed to verify modules"
 	}
 	Install-Hooks
-	Write-SuccessBanner "project installed"
+	Write-Success "project installed"
 }
 
 <#
@@ -32,6 +32,7 @@ Verify the build environment is set up correctly
 Confirm-Environment
 #>
 Function Confirm-Environment {
+	Write-Info "checking environment"
 	if (-Not (Get-Command -Name go -ErrorAction SilentlyContinue)) {
 		Write-Error "go is required"
 	}
@@ -85,7 +86,6 @@ Format all Go code in this project
 Format-Project
 #>
 Function Format-Project {
-    Write-Info "enforcing coding standards"
 	go fmt "./..."
 	Write-Success "go style guide applied"
 	go mod tidy
@@ -108,27 +108,25 @@ Function Invoke-Tests {
 	$output = (go test "./..." --cover)
 	$failed = 0
 	$total = 0
-	ForEach ($line In ($output -Split "\n")) {
-		If (-Not (Select-String -Pattern "\w\s+$module" -InputObject $line)) {
-			Continue
-		}
+	ForEach ($line In ($output | Select-String -AllMatches -Pattern "\w\s+$module")) {
 		$status, $module, $coverage = Get-TestDetails($line)
-		$total += 1
-		If (Select-String -SimpleMatch -Pattern "OK" -InputObject $status) {
-			Write-Pass "$module , $coverage"
+		$total++
+		If ($status -Like "ok*") {
+			Write-Pass "$module , $coverage" 	
 		} Else {
-			$failed += 1
+			$failed++
 			Write-Failure "$module , $coverage"
 		}
 	}
-	If (Assert-ExitCode 0) {
+	Write-Output " ----".PadLeft(5)
+	If ((Assert-ExitCode 0) -and ($failed -eq 0)) {
 		If ($total -gt 0) {
-			Write-SuccessBanner "all tests passing"
+			Write-Success "all tests passing"
 		} Else {
 			Write-Warning "no unit tests"
 		}
 	} Else {
-		Write-FailureBanner "$failed of $total tests failing"
+		Write-Failure "$failed of $total packages failing"
 		Write-Output ""
 		Write-Output $output
 	}
@@ -158,9 +156,9 @@ Function Invoke-Checks {
 	Write-Info "examining packages"
 	go vet "./..."
 	If (Assert-ExitCode 0) {
-		Write-SuccessBanner "no problems detected"
+		Write-Success "no problems detected"
 	} Else {
-		Write-FailureBanner "detected a few problems"
+		Write-Failure "detected a few problems"
 	}
 }
 
@@ -175,41 +173,42 @@ See how captainslog performs
 Invoke-Benchmarks
 #>
 Function Invoke-Benchmarks {
-    Write-Info "running benchmark tests"
-    $startTime = (Get-Date)
-    $output = (go run ./benchmarks/)
-    $executionTime = (Get-Date).Subtract($startTime).TotalMilliseconds / 60
-    If (Assert-ExitCode 0) {
-        Write-Success "benchmarks completed in $executionTime s"
-        Write-Output $output[-5..-1]
-    } Else {
-        Write-Error "there was an error while running the benchmarks"
-        Write-Output $output
-    }
+	Write-Info "running benchmark tests"
+	$startTime = (Get-Date)
+	$output = (go run ./benchmarks/)
+	$executionTime = (Get-Date).Subtract($startTime).TotalMilliseconds / 60
+	If (Assert-ExitCode 0) {
+			Write-Success "benchmarks completed in $executionTime s"
+			Write-Output $output[-5..-1]
+	} Else {
+			Write-Error "there was an error while running the benchmarks"
+			Write-Output $output
+	}
 }
+
 
 <#
 .SYNOPSIS
-Run demo
+Run captainslog demo
 
 .DESCRIPTION
 See captainslog in action
 
 .EXAMPLE
-Invoke-Demo --help
+Invoke-Demo
 #>
 Function Invoke-Demo {
-	go run ./demo $args
+	go run ./demo/
 }
 
 ##########################################################################################
 
-Export-ModuleMember -Function Install-Project
 Export-ModuleMember -Function Format-Project
-Export-ModuleMember -Function Invoke-Tests
-Export-ModuleMember -Function Invoke-Checks
+Export-ModuleMember -Function Install-Project
 Export-ModuleMember -Function Invoke-Benchmarks
+Export-ModuleMember -Function Invoke-Checks
 Export-ModuleMember -Function Invoke-Demo
+Export-ModuleMember -Function Invoke-Tests
 
 ##########################################################################################
 #                                 Utility Functions                                      #
@@ -221,39 +220,31 @@ function Assert-ExitCode($expectedExitCode)
 }
 
 Function Write-Success($message) {
-	Write-Host -NoNewline -ForegroundColor Green "OK".PadLeft(5)
+	Write-Host -NoNewline -ForegroundColor Green "ok".PadLeft(5)
 	Write-Host " : $message"
 }
 
 Function Write-Pass($message) {
-	Write-Host -NoNewline -ForegroundColor Green " • PASS".PadLeft(5)
+	Write-Host -NoNewline -ForegroundColor Green "pass".PadLeft(5)
 	Write-Host " : $message"
 }
 Function Write-Failure($message) {
-	Write-Host -NoNewline -ForegroundColor Red " • FAIL".PadLeft(5)
+	Write-Host -NoNewline -ForegroundColor Red "fail".PadLeft(5)
 	Write-Host " : $message"
 }
 
-Function Write-SuccessBanner($message) {
-	Write-Host -ForegroundColor White -BackgroundColor DarkGreen "OK".PadLeft(5) ": $message "
-}
-
-Function Write-FailureBanner($message) {
-	Write-Host -ForegroundColor White -BackgroundColor DarkRed "FAIL".PadLeft(5) ": $message "
-}
-
 Function Write-Warning($message) {
-	Write-Host -NoNewline -ForegroundColor Yellow "WARN".PadLeft(5)
+	Write-Host -NoNewline -ForegroundColor Yellow "warn".PadLeft(5)
 	Write-Host " : $message"
 }
 
 Function Write-Error($message) {
-	Write-Host -NoNewline -ForegroundColor Red "ERROR".PadLeft(5)
+	Write-Host -NoNewline -ForegroundColor Red "error".PadLeft(5)
 	Write-Host " : $message"
 	Throw $message
 }
 
 Function Write-Info($message) {
-	Write-Host -NoNewline -ForegroundColor CYAN "INFO".PadLeft(5)
+	Write-Host -NoNewline -ForegroundColor CYAN "info".PadLeft(5)
 	Write-Host " : $message"
 }
