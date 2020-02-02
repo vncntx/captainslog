@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/vincentfiestada/captainslog"
-	"github.com/vincentfiestada/captainslog/levels"
-	"github.com/vincentfiestada/captainslog/preflight"
+	"github.com/vincentfiestada/captainslog/v2"
+	"github.com/vincentfiestada/captainslog/v2/levels"
+	"github.com/vincentfiestada/captainslog/v2/preflight"
 )
 
 // Patterns
