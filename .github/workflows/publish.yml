@@ -24,4 +24,5 @@ jobs:
         shell: pwsh
         run: |
             $version=($env:GITHUB_REF -Split '/')[-1]
-            Invoke-WebRequest -Uri "http://proxy.golang.org/github.com/vincentfiestada/captainslog/v2/@v/${version}.zip"
+            Import-Module ./tasks.psm1
+            Publish-Version $version
