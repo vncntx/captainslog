@@ -6,9 +6,6 @@ jobs:
   build:
     name: Publish
     runs-on: ubuntu-latest
-    env:
-      GO_MODULE: github.com/vincentfiestada/captainslog/v2
-
     steps:
       - name: Check out code
         uses: actions/checkout@v1
@@ -24,4 +21,4 @@ jobs:
       - name: Submit to go.dev
         shell: pwsh
         run: |
-            Invoke-WebRequest -Uri "http://proxy.golang.org/${GO_MODULE}/@v/${env:GITHUB_REF}.zip"
+            Invoke-WebRequest -Uri "http://proxy.golang.org/github.com/vincentfiestada/captainslog/v2/@v/${env:GITHUB_REF}.zip"
