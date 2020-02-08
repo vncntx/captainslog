@@ -1,5 +1,6 @@
-// Benchmarks for stdlib log library
 package main
+
+// Please install zap before running these benchmarks
 
 import (
 	"fmt"
@@ -9,9 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/vincentfiestada/captainslog"
-	"github.com/vincentfiestada/captainslog/format"
-	"go.uber.org/zap"
+	"github.com/vincentfiestada/captainslog/v2"
+	"github.com/vincentfiestada/captainslog/v2/format"
 )
 
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -21,8 +21,6 @@ func main() {
 	results := []string{}
 
 	results = append(results, runBenchmark("stdlib", benchmarkStdlib))
-	results = append(results, runBenchmark("zap", benchmarkZap))
-	results = append(results, runBenchmark("zap (sugar)", benchmarkZapSugar))
 	results = append(results, runBenchmark("captainslog", benchmarkCaptainslog))
 	results = append(results, runBenchmark("captainslog (json)", benchmarkCaptainslogJSON))
 
@@ -51,45 +49,6 @@ func benchmarkStdlib(b *testing.B) {
 			)
 		}
 	})
-}
-
-func benchmarkZap(b *testing.B) {
-	logger, err := zap.NewProduction()
-	if err != nil {
-		panic(err)
-	}
-
-	b.RunParallel(func(i *testing.PB) {
-		for i.Next() {
-			logger.Info(randomMessage(20),
-				zap.Int("a", rand.Int()),
-				zap.Int("b", rand.Int()),
-				zap.Int("c", rand.Int()),
-			)
-		}
-	})
-
-	_ = logger.Sync()
-}
-
-func benchmarkZapSugar(b *testing.B) {
-	logger, err := zap.NewProduction()
-	if err != nil {
-		panic(err)
-	}
-	sugar := logger.Sugar()
-
-	b.RunParallel(func(i *testing.PB) {
-		for i.Next() {
-			sugar.Infow(randomMessage(20),
-				"a", rand.Int(),
-				"b", rand.Int(),
-				"c", rand.Int(),
-			)
-		}
-	})
-
-	_ = logger.Sync()
 }
 
 func benchmarkCaptainslog(b *testing.B) {

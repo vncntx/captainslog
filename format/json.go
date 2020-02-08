@@ -3,7 +3,7 @@ package format
 import (
 	"fmt"
 
-	"github.com/vincentfiestada/captainslog/msg"
+	"github.com/vincentfiestada/captainslog/v2/msg"
 )
 
 // JSON formats a message as JSON

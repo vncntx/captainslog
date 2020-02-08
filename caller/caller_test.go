@@ -3,15 +3,15 @@ package caller_test
 import (
 	"testing"
 
-	"github.com/vincentfiestada/captainslog/caller"
-	"github.com/vincentfiestada/captainslog/preflight"
+	"github.com/vincentfiestada/captainslog/v2/caller"
+	"github.com/vincentfiestada/captainslog/v2/preflight"
 )
 
 func TestGetName(test *testing.T) {
 	t := preflight.Unit(test)
 
 	// GetName(1) should return the name of the calling function
-	this := "github.com/vincentfiestada/captainslog/caller_test.TestGetName"
+	this := "github.com/vincentfiestada/captainslog/v2/caller_test.TestGetName"
 	t.Expect(caller.GetName(1)).Equals(this)
 
 	func() {

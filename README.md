@@ -2,11 +2,12 @@
 
 # Captain's Log
 
-![](https://github.com/vincentfiestada/captainslog/workflows/Unit%20Tests/badge.svg)
+[![](https://github.com/vincentfiestada/captainslog/workflows/Unit%20Tests/badge.svg)](https://github.com/vincentfiestada/captainslog/actions)
+[![](https://github.com/vincentfiestada/captainslog/workflows/Style%20Checks/badge.svg)](https://github.com/golang/lint)
 [![GoReportCard](https://goreportcard.com/badge/github.com/vincentfiestada/captainslog)](https://goreportcard.com/report/github.com/vincentfiestada/captainslog)
-[![GoDoc](https://godoc.org/github.com/vincentfiestada/captainslog?status.svg)](https://godoc.org/github.com/vincentfiestada/captainslog)
-[![Conventional Commits](https://img.shields.io/badge/commits-conventional-00b6ff.svg?labelColor=1F6CB4)](https://conventionalcommits.org)
-[![License: BSD-3](https://img.shields.io/github/license/vincentfiestada/captainslog.svg?labelColor=1F6CB4&color=00b6ff)](https://github.com/vincentfiestada/captainslog/blob/master/LICENSE)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-0047ab?labelColor=16161b)](https://godoc.org/github.com/vincentfiestada/captainslog)
+[![Conventional Commits](https://img.shields.io/badge/commits-conventional-0047ab.svg?labelColor=16161b)](https://conventionalcommits.org)
+[![License: BSD-3](https://img.shields.io/github/license/vincentfiestada/captainslog.svg?labelColor=16161b&color=0047ab)](https://github.com/vincentfiestada/captainslog/blob/master/LICENSE)
 
 A simple logging library for [Go](https://golang.org/)
 
@@ -17,6 +18,12 @@ A simple logging library for [Go](https://golang.org/)
 
 ![Screenshot of captainslog in action](./assets/screenshot.png)
 
+## Installation
+
+```
+go get github.com/vincentfiestada/captainslog
+```
+
 ## Usage
 
 This library is designed to provide a familiar yet powerful interface for logging. Each logging method accepts a format string and arguments. Structured logging is supported right out of the box. The Logger allows you to turn colors on/off, specify a datetime format, set the logging threshold, and even provide your own function to control how logs are written.
@@ -25,7 +32,7 @@ This library is designed to provide a familiar yet powerful interface for loggin
 package main
 
 import (
-	"github.com/vincentfiestada/captainslog"
+	"github.com/vincentfiestada/captainslog/v2"
 )
 
 var log = captainslog.NewLogger()
@@ -54,18 +61,17 @@ func main() {
 
 ## Performance
 
-The main goals of this library are convenience and familiarity for programmers. Certain design decisions have a negative impact on performance. Take this into consideration before choosing to use captainslog. You can run these benchmarks using `task benchmark`.
+The main goals of this library are convenience and familiarity for programmers. Certain design decisions have a negative impact on performance. Take this into consideration before choosing to use captainslog. To see for yourself, run the benchmarks using `Invoke-Benchmarks`.
 
 ## Development
 
-Please read the [Contribution Guide](./CONTRIBUTING.md) before you proceed.
+Please read the [Contribution Guide](./CONTRIBUTING.md) before you proceed. This project uses [Powershell Core](https://microsoft.com/PowerShell) to run tasks. To get started,
 
-This project uses [Task runner](https://taskfile.dev/). List all available tasks by running `task -l`. To get started, run:
-
-```
-task install
+```ps1
+Import-Module .\tasks.psm1
+Get-Command -Module tasks
 ```
 
 ## Copyright
 
-Copyright 2019 Vincent Fiestada. This project is released under a BSD-style [license](./LICENSE).
+Copyright 2019-2020 [Vincent Fiestada](mailto:vincent@vincent.click). This project is released under a [BSD-style license](./license).

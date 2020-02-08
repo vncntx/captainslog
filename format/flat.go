@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/vincentfiestada/captainslog/msg"
+	"github.com/vincentfiestada/captainslog/v2/msg"
 )
 
 // Flat formats a message as flat text

@@ -4,10 +4,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/vincentfiestada/captainslog/caller"
-	"github.com/vincentfiestada/captainslog/format"
-	"github.com/vincentfiestada/captainslog/levels"
-	"github.com/vincentfiestada/captainslog/msg"
+	"github.com/vincentfiestada/captainslog/v2/caller"
+	"github.com/vincentfiestada/captainslog/v2/format"
+	"github.com/vincentfiestada/captainslog/v2/levels"
+	"github.com/vincentfiestada/captainslog/v2/msg"
 )
 
 // Defaults

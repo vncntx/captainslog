@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/vincentfiestada/captainslog"
-	"github.com/vincentfiestada/captainslog/levels"
+	"github.com/vincentfiestada/captainslog/v2"
+	"github.com/vincentfiestada/captainslog/v2/levels"
 )
 
 var log *captainslog.Logger
