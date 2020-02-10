@@ -1,11 +1,13 @@
 name: Publish Package
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - v*.*.* # run on version tags, e.g. v2.0.0
 jobs:
   build:
     name: Publish
     runs-on: ubuntu-latest
+
     steps:
       - name: Check out code
         uses: actions/checkout@v1
@@ -18,7 +20,9 @@ jobs:
             sudo add-apt-repository -y universe
             sudo apt-get install -y powershell
     
-      - name: Submit to go.dev
+      - name: Submit to pkg.go.dev
         shell: pwsh
         run: |
-            Invoke-WebRequest -Uri "http://proxy.golang.org/github.com/vincentfiestada/captainslog/v2/@v/${env:GITHUB_REF}.zip"
+            $version=($env:GITHUB_REF -Split '/')[-1]
+            Import-Module ./tasks.psm1
+            Publish-Version $version

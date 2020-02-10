@@ -201,6 +201,25 @@ Function Invoke-Demo {
 	go run ./demo/
 }
 
+<#
+.SYNOPSIS
+Publish a version to pkg.go.dev
+
+.DESCRIPTION
+Add the specified version to pkg.go.dev
+Expects the version tag to exist on the repository
+
+.EXAMPLE
+Publish-Version v2.0.0
+#>
+Function Publish-Version($version) {
+	$module=(Get-GoModule)
+	Write-Info "publishing $version of $module to pkg.go.dev"
+	If (Invoke-WebRequest -Uri "http://proxy.golang.org/${module}/@v/${version}.zip") {
+		Write-Success "published to https://pkg.go.dev/mod/${module}@${version}"
+	}
+}
+
 ##########################################################################################
 
 Export-ModuleMember -Function Format-Project
@@ -209,6 +228,7 @@ Export-ModuleMember -Function Invoke-Benchmarks
 Export-ModuleMember -Function Invoke-Checks
 Export-ModuleMember -Function Invoke-Demo
 Export-ModuleMember -Function Invoke-Tests
+Export-ModuleMember -Function Publish-Version
 
 ##########################################################################################
 #                                 Utility Functions                                      #
