@@ -30,7 +30,7 @@ func TestFlat(test *testing.T) {
 			},
 		}
 
-		format.Flat(message)
+		message.Print(message)
 
 	}).Equals("  info :: 08-28-2019 12:32:24 PST :: captainslog :: captain=\"picard\", first officer=\"riker\" :: starship enterprise\n")
 }

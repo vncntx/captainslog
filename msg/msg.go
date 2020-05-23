@@ -12,6 +12,9 @@ import (
 // Field is a key-value pair
 type Field [2]interface{}
 
+// Format formats and prints out a log message
+type Format func(msg *Message)
+
 // Message is a log message that gets built in multiple steps
 type Message struct {
 	Time      string

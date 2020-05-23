@@ -20,6 +20,8 @@ func main() {
 	log.Warn("%d", 4)
 	log.Error("%d", 5)
 
+	log.Info("starship enterprise")
+
 	log.Field("captain", "picard").Trace("starship enterprise")
 	log.Field("captain", "picard").Debug("starship enterprise")
 	log.Field("captain", "picard").Info("starship enterprise")

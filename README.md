@@ -16,7 +16,7 @@ A simple logging library for [Go](https://golang.org/)
 - Structured logging
 - Function name detection
 
-![Screenshot of captainslog in action](./assets/screenshot.png)
+![Screenshot of captainslog in action](./assets/demo.png)
 
 ## Installation
 
@@ -58,6 +58,10 @@ func main() {
 
 }
 ```
+
+## Format
+
+There are several [log formats](./docs/format.md) included that you can choose from. It's also easy to write your own custom function to print logs just the way you want to.
 
 ## Performance
 

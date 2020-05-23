@@ -10,7 +10,7 @@ import (
 	"github.com/vincentfiestada/captainslog/v2/preflight"
 )
 
-func TestJSON(test *testing.T) {
+func TestMinimal(test *testing.T) {
 	t := preflight.Unit(test)
 
 	t.ExpectOutput(func(stdout *os.File) {
@@ -21,7 +21,7 @@ func TestJSON(test *testing.T) {
 			Level:     levels.Info,
 			Threshold: levels.Info,
 			Stdout:    stdout,
-			Print:     format.JSON,
+			Print:     format.Minimal,
 			Data: []interface{}{
 				"captain",
 				"picard",
@@ -32,5 +32,5 @@ func TestJSON(test *testing.T) {
 
 		message.Print(message)
 
-	}).Equals("{\"level\":\"info\",\"time\":\"08-28-2019 12:32:24 PST\",\"caller\":\"captainslog\",\"captain\":\"picard\",\"first officer\":\"riker\",\"message\":\"starship enterprise\"}\n")
+	}).Equals("  info: [captain=\"picard\", first officer=\"riker\"] starship enterprise\n")
 }
