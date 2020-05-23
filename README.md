@@ -2,12 +2,12 @@
 
 # Captain's Log
 
-[![](https://github.com/vincentfiestada/captainslog/workflows/Unit%20Tests/badge.svg)](https://github.com/vincentfiestada/captainslog/actions)
-[![](https://github.com/vincentfiestada/captainslog/workflows/Style%20Checks/badge.svg)](https://github.com/golang/lint)
+[![](https://github.com/vincentfiestada/captainslog/workflows/Unit%20Tests/badge.svg)](https://github.com/vincentfiestada/captainslog/actions?query=workflow%3A%22Unit+Tests%22)
+[![](https://github.com/vincentfiestada/captainslog/workflows/Style%20Checks/badge.svg)](https://github.com/vincentfiestada/captainslog/actions?query=workflow%3A%22Style+Checks%22)
 [![GoReportCard](https://goreportcard.com/badge/github.com/vincentfiestada/captainslog)](https://goreportcard.com/report/github.com/vincentfiestada/captainslog)
-[![GoDoc](https://img.shields.io/badge/godoc-reference-0047ab?labelColor=16161b)](https://godoc.org/github.com/vincentfiestada/captainslog)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-0047ab?labelColor=16161b)](https://pkg.go.dev/github.com/vincentfiestada/captainslog/v2?tab=doc)
 [![Conventional Commits](https://img.shields.io/badge/commits-conventional-0047ab.svg?labelColor=16161b)](https://conventionalcommits.org)
-[![License: BSD-3](https://img.shields.io/github/license/vincentfiestada/captainslog.svg?labelColor=16161b&color=0047ab)](https://github.com/vincentfiestada/captainslog/blob/master/LICENSE)
+[![License: BSD-3](https://img.shields.io/github/license/vincentfiestada/captainslog.svg?labelColor=16161b&color=0047ab)](./license)
 
 A simple logging library for [Go](https://golang.org/)
 
@@ -16,12 +16,12 @@ A simple logging library for [Go](https://golang.org/)
 - Structured logging
 - Function name detection
 
-![Screenshot of captainslog in action](./assets/screenshot.png)
+![Screenshot of captainslog in action](./assets/demo.png)
 
 ## Installation
 
 ```
-go get github.com/vincentfiestada/captainslog
+go get github.com/vincentfiestada/captainslog/v2
 ```
 
 ## Usage
@@ -47,11 +47,11 @@ func main() {
 
 	log.Fields(
 
-		log.I("captain",          "picard"),
-		log.I("first officer", 	  "riker"),
-		log.I("science officer",  "data"),
-		log.I("medical officer",  "crusher"),
-		log.I("chief engineer",   "la forge"),
+		log.I("captain", "picard"),
+		log.I("first officer", "riker"),
+		log.I("science officer", "data"),
+		log.I("medical officer", "crusher"),
+		log.I("chief engineer", "la forge"),
 		log.I("security officer", "worf"),
 
 	).Info("starship enterprise")
@@ -59,9 +59,13 @@ func main() {
 }
 ```
 
+## Format
+
+There are several [log formats](./docs/format.md) included that you can choose from. It's also easy to write your own custom function to print logs just the way you want to.
+
 ## Performance
 
-The main goals of this library are convenience and familiarity for programmers. Certain design decisions have a negative impact on performance. Take this into consideration before choosing to use captainslog. To see for yourself, run the benchmarks using `Invoke-Benchmarks`.
+The main goals of this library are convenience and familiarity for programmers, but it should have reasonable performance for most projects. To see for yourself, run the benchmarks using `Invoke-Benchmarks`.
 
 ## Development
 
@@ -75,3 +79,5 @@ Get-Command -Module tasks
 ## Copyright
 
 Copyright 2019-2020 [Vincent Fiestada](mailto:vincent@vincent.click). This project is released under a [BSD-style license](./license).
+
+Icon made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a>.

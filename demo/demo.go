@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/vincentfiestada/captainslog/v2"
+	"github.com/vincentfiestada/captainslog/v2/format"
 	"github.com/vincentfiestada/captainslog/v2/levels"
 )
 
@@ -11,6 +12,7 @@ func init() {
 	log = captainslog.NewLogger()
 	log.Name = "captainslog"
 	log.Level = levels.Trace
+	log.Format = format.JSON
 }
 
 func main() {
@@ -19,6 +21,8 @@ func main() {
 	log.Info("%d", 3)
 	log.Warn("%d", 4)
 	log.Error("%d", 5)
+
+	log.Info("starship enterprise")
 
 	log.Field("captain", "picard").Trace("starship enterprise")
 	log.Field("captain", "picard").Debug("starship enterprise")

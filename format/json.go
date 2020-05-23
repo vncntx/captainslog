@@ -10,11 +10,16 @@ import (
 func JSON(msg *msg.Message) {
 	stream, level, _ := msg.Props()
 
-	write(stream, fmt.Sprintf(`{"level":"%s","time":"%s","caller":"%s",`, level, msg.Time, msg.Name))
+	Write(stream, fmt.Sprintf(`{"level":"%s","time":"%s","from":"%s",`, level, msg.Time, msg.Name))
 	if len(msg.Data) > 0 {
+		Write(stream, `"fields":{`)
 		for i := 0; i < len(msg.Data)-1; i += 2 {
-			write(stream, fmt.Sprintf(`"%s":%#v,`, msg.Data[i], msg.Data[i+1]))
+			if i > 0 {
+				Write(stream, ",")
+			}
+			Write(stream, fmt.Sprintf(`"%s":%#v`, msg.Data[i], msg.Data[i+1]))
 		}
+		Write(stream, "},")
 	}
-	write(stream, fmt.Sprintf("\"message\":\"%s\"}\n", msg.Text))
+	Write(stream, fmt.Sprintf("\"message\":\"%s\"}\n", msg.Text))
 }

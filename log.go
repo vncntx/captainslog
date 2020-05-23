@@ -17,14 +17,17 @@ const (
 
 // Logger is an object for logging
 type Logger struct {
-	Name       string
-	Level      int
-	HasColor   bool
+	// name of the logger; leave empty to log the current function
+	Name     string
+	Level    int
+	HasColor bool
+	// layout string used to format the time. See https://pkg.go.dev/time?tab=doc#Time.Format
 	TimeFormat string
+	// maximum caller name length to display
 	NameCutoff int
 	Stdout     *os.File
 	Stderr     *os.File
-	Format     msg.Printer
+	Format     msg.Format
 }
 
 // NewLogger returns a new logger with the specified minimum logging level
@@ -58,7 +61,7 @@ func (log *Logger) message() *msg.Message {
 	msg.Stderr = log.Stderr
 	msg.HasColor = log.HasColor
 	msg.Threshold = log.Level
-	msg.Format = log.Format
+	msg.Print = log.Format
 	msg.Data = []interface{}{}
 	return msg
 }

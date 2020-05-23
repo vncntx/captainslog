@@ -12,6 +12,9 @@ import (
 // Field is a key-value pair
 type Field [2]interface{}
 
+// Format formats and prints out a log message
+type Format func(msg *Message)
+
 // Message is a log message that gets built in multiple steps
 type Message struct {
 	Time      string
@@ -22,7 +25,7 @@ type Message struct {
 	HasColor  bool
 	Stdout    *os.File
 	Stderr    *os.File
-	Format    Printer
+	Print     Format
 	Data      []interface{}
 }
 
@@ -73,7 +76,7 @@ func (msg *Message) Log(level int, format string, args ...interface{}) {
 	}
 
 	msg.Text = fmt.Sprintf(format, args...)
-	msg.Format(msg)
+	msg.Print(msg)
 	// Return message to pool
 	MsgPool.Put(msg)
 }
