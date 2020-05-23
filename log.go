@@ -17,10 +17,13 @@ const (
 
 // Logger is an object for logging
 type Logger struct {
-	Name       string
-	Level      int
-	HasColor   bool
+	// name of the logger; leave empty to log the current function
+	Name     string
+	Level    int
+	HasColor bool
+	// layout string used to format the time. See https://pkg.go.dev/time?tab=doc#Time.Format
 	TimeFormat string
+	// maximum caller name length to display
 	NameCutoff int
 	Stdout     *os.File
 	Stderr     *os.File
