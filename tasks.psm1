@@ -41,7 +41,7 @@ Function Confirm-Environment {
 	} else {
 		Write-Success "go modules are enabled"
 	}
-	$GO_VERSION = "1.13"
+	$GO_VERSION = "1.14"
 	if (-Not (go version | Select-String -SimpleMatch "go$GO_VERSION")) {
 		Write-Warning "go v$GO_VERSION should be installed"
 	} else {
@@ -215,7 +215,7 @@ Publish-Version v2.0.0
 Function Publish-Version($version) {
 	$module=(Get-GoModule)
 	Write-Info "publishing $version of $module to pkg.go.dev"
-	If (Invoke-WebRequest -Uri "http://proxy.golang.org/${module}/@v/${version}.zip") {
+	If (Invoke-WebRequest -Uri "http://proxy.golang.org/${module}/@v/${version}.info") {
 		Write-Success "published to https://pkg.go.dev/mod/${module}@${version}"
 	}
 }
