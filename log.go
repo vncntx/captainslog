@@ -24,7 +24,7 @@ type Logger struct {
 	NameCutoff int
 	Stdout     *os.File
 	Stderr     *os.File
-	Format     msg.Printer
+	Format     msg.Format
 }
 
 // NewLogger returns a new logger with the specified minimum logging level
@@ -58,7 +58,7 @@ func (log *Logger) message() *msg.Message {
 	msg.Stderr = log.Stderr
 	msg.HasColor = log.HasColor
 	msg.Threshold = log.Level
-	msg.Format = log.Format
+	msg.Print = log.Format
 	msg.Data = []interface{}{}
 	return msg
 }

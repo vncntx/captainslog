@@ -21,7 +21,7 @@ func TestFlat(test *testing.T) {
 			Level:     levels.Info,
 			Threshold: levels.Info,
 			Stdout:    stdout,
-			Format:    format.Flat,
+			Print:     format.Flat,
 			Data: []interface{}{
 				"captain",
 				"picard",

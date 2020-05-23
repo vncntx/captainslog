@@ -21,7 +21,7 @@ func TestJSON(test *testing.T) {
 			Level:     levels.Info,
 			Threshold: levels.Info,
 			Stdout:    stdout,
-			Format:    format.JSON,
+			Print:     format.JSON,
 			Data: []interface{}{
 				"captain",
 				"picard",

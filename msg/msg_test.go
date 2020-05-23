@@ -40,7 +40,7 @@ func TestLogs(test *testing.T) {
 
 	message := createMessage(levels.Info)
 
-	message.Format = func(input *msg.Message) {
+	message.Print = func(input *msg.Message) {
 		t.Expect(input).Equals(message)
 		t.Expect(input.Data).HasLength(0)
 	}
@@ -115,7 +115,7 @@ func createMessage(level int) *msg.Message {
 		Threshold: levels.Trace,
 		Stdout:    os.Stdout,
 		Stderr:    os.Stderr,
-		Format:    format.Flat,
+		Print:     format.Flat,
 		Data:      []interface{}{},
 	}
 }
