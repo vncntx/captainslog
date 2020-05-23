@@ -10,4 +10,11 @@ This project adheres to the [Conventional Commit](https://www.conventionalcommit
 
 ## Getting Started
 
-The _hooks_ directory contains scripts that enforce the style guide and run tests before every commit. You can set them up by running `task install-hooks`.
+This project uses [Powershell Core](https://microsoft.com/PowerShell) to run tasks. To get started,
+
+```ps1
+Import-Module .\tasks.psm1
+Get-Command -Module tasks
+```
+
+The _hooks_ directory contains scripts that enforce the style guide and run tests before every commit. You can set them up by running `Install-Project`.
