@@ -32,5 +32,5 @@ func TestJSON(test *testing.T) {
 
 		message.Print(message)
 
-	}).Equals("{\"level\":\"info\",\"time\":\"08-28-2019 12:32:24 PST\",\"caller\":\"captainslog\",\"captain\":\"picard\",\"first officer\":\"riker\",\"message\":\"starship enterprise\"}\n")
+	}).Equals("{\"level\":\"info\",\"time\":\"08-28-2019 12:32:24 PST\",\"from\":\"captainslog\",\"fields\":{\"captain\":\"picard\",\"first officer\":\"riker\"},\"message\":\"starship enterprise\"}\n")
 }
