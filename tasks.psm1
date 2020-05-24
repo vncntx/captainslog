@@ -47,6 +47,11 @@ Function Confirm-Environment {
 	} else {
 		Write-Success "go v$GO_VERSION is installed"
 	}
+	if (-Not (Get-Command -Name "golangci-lint" -ErrorAction SilentlyContinue)) {
+		Write-Warning "golangci-lint should be installed"
+	} else {
+		Write-Success "golangci-lint is installed"
+	}
 }
 
 <#
@@ -154,7 +159,12 @@ Invoke-Checks
 
 Function Invoke-Checks {
 	Write-Info "examining packages"
-	go vet "./..."
+	$lint = "golangci-lint run"
+	if (-Not (Get-Command -Name "golangci-lint" -ErrorAction SilentlyContinue)) {
+		Write-Warning "golangci-lint is not installed, using `go vet` "
+		$lint = "go vet ./..."
+	}
+	Invoke-Expression $lint
 	If (Assert-ExitCode 0) {
 		Write-Success "no problems detected"
 	} Else {
