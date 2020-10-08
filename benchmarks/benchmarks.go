@@ -21,8 +21,9 @@ func main() {
 	results := []string{}
 
 	results = append(results, runBenchmark("stdlib", benchmarkStdlib))
-	results = append(results, runBenchmark("captainslog", benchmarkCaptainslog))
-	results = append(results, runBenchmark("captainslog (json)", benchmarkCaptainslogJSON))
+	results = append(results, runBenchmark("captainslog", benchmarkCaptainsLog))
+	results = append(results, runBenchmark("captainslog (json)", benchmarkCaptainsLogJSON))
+	results = append(results, runBenchmark("captainslog (minimal)", benchmarkCaptainsLogMinimal))
 
 	fmt.Printf("\n%21s\n", "Benchmark Results")
 	for _, res := range results {
@@ -32,7 +33,7 @@ func main() {
 
 func runBenchmark(name string, test func(*testing.B)) string {
 	result := testing.Benchmark(test)
-	return fmt.Sprintf("%20s: %10d ns/op, %4d allocs/op, %5d bytes/op", name, result.NsPerOp(), result.AllocsPerOp(), result.AllocedBytesPerOp())
+	return fmt.Sprintf("%25s: %10d ns/op, %4d allocs/op, %5d bytes/op", name, result.NsPerOp(), result.AllocsPerOp(), result.AllocedBytesPerOp())
 }
 
 func benchmarkStdlib(b *testing.B) {
@@ -51,8 +52,9 @@ func benchmarkStdlib(b *testing.B) {
 	})
 }
 
-func benchmarkCaptainslog(b *testing.B) {
+func benchmarkCaptainsLog(b *testing.B) {
 	log := captainslog.NewLogger()
+	log.Stdout = os.Stdout
 
 	b.RunParallel(func(i *testing.PB) {
 		for i.Next() {
@@ -60,13 +62,14 @@ func benchmarkCaptainslog(b *testing.B) {
 				log.I("a", rand.Int()),
 				log.I("b", rand.Int()),
 				log.I("c", rand.Int()),
-			).Info("%s", randomMessage(20))
+			).Info(randomMessage(20))
 		}
 	})
 }
 
-func benchmarkCaptainslogJSON(b *testing.B) {
+func benchmarkCaptainsLogJSON(b *testing.B) {
 	log := captainslog.NewLogger()
+	log.Stdout = os.Stdout
 	log.Format = format.JSON
 
 	b.RunParallel(func(i *testing.PB) {
@@ -75,7 +78,23 @@ func benchmarkCaptainslogJSON(b *testing.B) {
 				log.I("a", rand.Int()),
 				log.I("b", rand.Int()),
 				log.I("c", rand.Int()),
-			).Info("%s", randomMessage(20))
+			).Info(randomMessage(20))
+		}
+	})
+}
+
+func benchmarkCaptainsLogMinimal(b *testing.B) {
+	log := captainslog.NewLogger()
+	log.Stdout = os.Stdout
+	log.Format = format.Minimal
+
+	b.RunParallel(func(i *testing.PB) {
+		for i.Next() {
+			log.Fields(
+				log.I("a", rand.Int()),
+				log.I("b", rand.Int()),
+				log.I("c", rand.Int()),
+			).Info(randomMessage(20))
 		}
 	})
 }
