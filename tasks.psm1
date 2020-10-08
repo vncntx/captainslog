@@ -41,11 +41,11 @@ Function Confirm-Environment {
 	} else {
 		Write-Success "go modules are enabled"
 	}
-	$GO_VERSION = "1.14"
-	if (-Not (go version | Select-String -SimpleMatch "go$GO_VERSION")) {
-		Write-Warning "go v$GO_VERSION should be installed"
+	$goVersion = (Get-TargetGoVersion)
+	if (-Not (go version | Select-String -SimpleMatch "go$goVersion")) {
+		Write-Warning "go v$goVersion should be installed"
 	} else {
-		Write-Success "go v$GO_VERSION is installed"
+		Write-Success "go v$goVersion is installed"
 	}
 	if (-Not (Get-Command -Name "golangci-lint" -ErrorAction SilentlyContinue)) {
 		Write-Warning "golangci-lint should be installed"
@@ -135,15 +135,6 @@ Function Invoke-Tests {
 		Write-Output ""
 		Write-Output $output
 	}
-}
-
-Function Get-TestDetails($testOutput) {
-	$parts = ($line -Split "\t")
-	Return $parts[0].ToUpper(), $parts[1], $parts[-1]
-}
-
-Function Get-GoModule {
-	Return ((Get-Content go.mod)[0] -Split " ")[-1]
 }
 
 <#
@@ -277,4 +268,17 @@ Function Write-Error($message) {
 Function Write-Info($message) {
 	Write-Host -NoNewline -ForegroundColor CYAN "info".PadLeft(5)
 	Write-Host " : $message"
+}
+
+Function Get-TestDetails($testOutput) {
+	$parts = ($line -Split "\t")
+	Return $parts[0].ToUpper(), $parts[1], $parts[-1]
+}
+
+Function Get-GoModule {
+	Return ((Get-Content go.mod)[0] -Split " ")[-1]
+}
+
+Function Get-TargetGoVersion {
+	Return ((Get-Content go.mod)[2] -Split " ")[-1]
 }
