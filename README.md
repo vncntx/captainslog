@@ -1,4 +1,4 @@
-![](./logo.png)
+![](./icon.svg)
 
 # Captain's Log
 
@@ -78,6 +78,6 @@ Get-Command -Module tasks
 
 ## Copyright
 
-Copyright 2019-2020 [Vincent Fiestada](mailto:vincent@vincent.click). This project is released under a [BSD-style license](./license).
+Copyright 2019-2020 [Vincent Fiestada](mailto:vincent@vincent.click). This project is released under a [BSD-3-Clause License](./license).
 
-Icon made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a>.
+Icon made by [Freepik](http://www.freepik.com/).
