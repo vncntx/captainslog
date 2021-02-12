@@ -4,8 +4,7 @@
 
 [![](https://github.com/vincentfiestada/captainslog/workflows/Unit%20Tests/badge.svg)](https://github.com/vincentfiestada/captainslog/actions?query=workflow%3A%22Unit+Tests%22)
 [![](https://github.com/vincentfiestada/captainslog/workflows/Style%20Checks/badge.svg)](https://github.com/vincentfiestada/captainslog/actions?query=workflow%3A%22Style+Checks%22)
-[![GoReportCard](https://goreportcard.com/badge/github.com/vincentfiestada/captainslog)](https://goreportcard.com/report/github.com/vincentfiestada/captainslog)
-[![GoDoc](https://img.shields.io/badge/godoc-reference-0047ab?labelColor=16161b)](https://pkg.go.dev/github.com/vincentfiestada/captainslog/v2?tab=doc)
+[![Docs](https://img.shields.io/badge/go.dev-docs-0047ab?labelColor=16161b)](https://pkg.go.dev/github.com/vincentfiestada/captainslog/v2?tab=doc)
 [![Conventional Commits](https://img.shields.io/badge/commits-conventional-0047ab.svg?labelColor=16161b)](https://conventionalcommits.org)
 [![License: BSD-3](https://img.shields.io/github/license/vincentfiestada/captainslog.svg?labelColor=16161b&color=0047ab)](./license)
 
