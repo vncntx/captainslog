@@ -215,6 +215,9 @@ Publish-Version v2.0.0
 #>
 Function Publish-Version($version) {
 	$module=(Get-GoModule)
+	if (-Not (Confirm-DeclaredVersion $version)) {
+		Return
+	}
 	Write-Info "publishing $version of $module to pkg.go.dev"
 	If (Invoke-WebRequest -Uri "http://proxy.golang.org/${module}/@v/${version}.info") {
 		Write-Success "published to https://pkg.go.dev/mod/${module}@${version}"
@@ -277,6 +280,20 @@ Function Get-TestDetails($testOutput) {
 
 Function Get-GoModule {
 	Return ((Get-Content go.mod)[0] -Split " ")[-1]
+}
+
+Function Confirm-DeclaredVersion($version) {
+	if ($version.StartsWith("v")) {
+		$version = $version.Substring(1)
+	}
+	$doc = "doc.go"
+	if ((Get-Content $doc | Select-String -Pattern "Version = `"$version`"").Length -lt 1) {
+		Write-Failure "declared version in '$doc' is not $version"
+		Return $false
+	}
+
+	Write-Success "declared version is correct"
+	Return $true
 }
 
 Function Get-TargetGoVersion {
