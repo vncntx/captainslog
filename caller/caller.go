@@ -23,6 +23,7 @@ func GetName(skip int) string {
 			index++
 		}
 	}
+
 	return target.Function
 }
 
@@ -36,10 +37,12 @@ func Shorten(path string, maxLen int) string {
 	if len(method) < maxLen {
 		return method
 	}
+
 	return method[:maxLen-2] + ".."
 }
 
 func getLastPart(text string, sep string) string {
 	parts := strings.Split(text, sep)
+
 	return parts[len(parts)-1]
 }

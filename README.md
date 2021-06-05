@@ -77,6 +77,6 @@ Get-Command -Module tasks
 
 ## Copyright
 
-Copyright 2019-2020 [Vincent Fiestada](mailto:vincent@vincent.click). This project is released under a [BSD-3-Clause License](./license).
+Copyright 2019-2021 [Vincent Fiestada](mailto:vincent@vincent.click). This project is released under a [BSD-3-Clause License](./license).
 
 Icon made by [Freepik](http://www.freepik.com/).

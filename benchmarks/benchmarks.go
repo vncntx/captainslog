@@ -17,7 +17,6 @@ import (
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 func main() {
-
 	results := []string{}
 
 	results = append(results, runBenchmark("stdlib", benchmarkStdlib))
@@ -25,7 +24,6 @@ func main() {
 	results = append(results, runBenchmark("captainslog (json)", benchmarkCaptainsLogJSON))
 	results = append(results, runBenchmark("captainslog (minimal)", benchmarkCaptainsLogMinimal))
 
-	fmt.Printf("\n%21s\n", "Benchmark Results")
 	for _, res := range results {
 		fmt.Println(res)
 	}
@@ -33,11 +31,15 @@ func main() {
 
 func runBenchmark(name string, test func(*testing.B)) string {
 	result := testing.Benchmark(test)
-	return fmt.Sprintf("%25s: %10d ns/op, %4d allocs/op, %5d bytes/op", name, result.NsPerOp(), result.AllocsPerOp(), result.AllocedBytesPerOp())
+
+	return fmt.Sprintf("%-25s: %10d ns/op, %4d allocs/op, %5d bytes/op", name, result.NsPerOp(), result.AllocsPerOp(), result.AllocedBytesPerOp())
 }
 
 func benchmarkStdlib(b *testing.B) {
-	log := log.New(os.Stdout, "", 0)
+	out := createTemp(b)
+	defer out.Close()
+
+	log := log.New(out, "", 0)
 
 	b.RunParallel(func(i *testing.PB) {
 		for i.Next() {
@@ -53,8 +55,11 @@ func benchmarkStdlib(b *testing.B) {
 }
 
 func benchmarkCaptainsLog(b *testing.B) {
+	out := createTemp(b)
+	defer out.Close()
+
 	log := captainslog.NewLogger()
-	log.Stdout = os.Stdout
+	log.Stdout = out
 
 	b.RunParallel(func(i *testing.PB) {
 		for i.Next() {
@@ -68,8 +73,11 @@ func benchmarkCaptainsLog(b *testing.B) {
 }
 
 func benchmarkCaptainsLogJSON(b *testing.B) {
+	out := createTemp(b)
+	defer out.Close()
+
 	log := captainslog.NewLogger()
-	log.Stdout = os.Stdout
+	log.Stdout = out
 	log.Format = format.JSON
 
 	b.RunParallel(func(i *testing.PB) {
@@ -84,8 +92,11 @@ func benchmarkCaptainsLogJSON(b *testing.B) {
 }
 
 func benchmarkCaptainsLogMinimal(b *testing.B) {
+	out := createTemp(b)
+	defer out.Close()
+
 	log := captainslog.NewLogger()
-	log.Stdout = os.Stdout
+	log.Stdout = out
 	log.Format = format.Minimal
 
 	b.RunParallel(func(i *testing.PB) {
@@ -99,10 +110,20 @@ func benchmarkCaptainsLogMinimal(b *testing.B) {
 	})
 }
 
+func createTemp(b *testing.B) *os.File {
+	out, err := os.CreateTemp(os.TempDir(), "log")
+	if err != nil {
+		b.Fail()
+	}
+
+	return out
+}
+
 func randomMessage(length int) string {
 	b := make([]byte, length)
 	for i := range b {
 		b[i] = charset[rand.Intn(len(charset))]
 	}
+
 	return string(b)
 }

@@ -18,6 +18,7 @@ const (
 func getLogger() *captainslog.Logger {
 	log := captainslog.NewLogger()
 	log.Level = levels.Trace
+
 	return log
 }
 
