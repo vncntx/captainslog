@@ -63,6 +63,7 @@ func (log *Logger) message() *msg.Message {
 	msg.Threshold = log.Level
 	msg.Print = log.Format
 	msg.Data = []interface{}{}
+
 	return msg
 }
 
