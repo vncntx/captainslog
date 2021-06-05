@@ -2,7 +2,7 @@ package format
 
 import (
 	"fmt"
-	"io"
+	"os"
 
 	"github.com/vincentfiestada/captainslog/v2/msg"
 )
@@ -34,6 +34,6 @@ func Flat(msg *msg.Message) {
 }
 
 // separate prints out a separator between parts of the message
-func separate(stream io.StringWriter) {
+func separate(stream *os.File) {
 	Write(stream, " :: ")
 }

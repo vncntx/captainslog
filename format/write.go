@@ -1,10 +1,10 @@
 package format
 
 import (
-	"io"
+	"os"
 )
 
 // Write a string to a stream
-func Write(stream io.StringWriter, str string) {
+func Write(stream *os.File, str string) {
 	_, _ = stream.WriteString(str)
 }
