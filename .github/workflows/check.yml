@@ -1,4 +1,4 @@
-name: Style Checks
+name: Static Checks
 on: [push]
 jobs:
   build:
