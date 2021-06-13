@@ -26,5 +26,4 @@ jobs:
         shell: pwsh
         run: |
             $version=($env:GITHUB_REF -Split '/')[-1]
-            Import-Module ./tasks.psm1
-            Publish-Version $version
+            ./tools.ps1 publish $version

@@ -9,5 +9,5 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v1
 
-      - name: Lint source code
+      - name: Detect issues using linters 
         uses: golangci/golangci-lint-action@v2
