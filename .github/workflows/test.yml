@@ -28,4 +28,6 @@ jobs:
         shell: pwsh
         env:
           GO111MODULE: on
-        run: ./tools.ps1 install && ./tools.ps1 test
+        run: |
+            ./tools.ps1 install
+            ./tools.ps1 test
