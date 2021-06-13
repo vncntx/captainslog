@@ -36,5 +36,4 @@ func main() {
 		log.I("chief engineer", "la forge"),
 		log.I("security officer", "worf"),
 	).Info("starship enterprise")
-
 }

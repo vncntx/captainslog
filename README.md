@@ -4,16 +4,16 @@
 
 [![](https://github.com/vincentfiestada/captainslog/workflows/Unit%20Tests/badge.svg)](https://github.com/vincentfiestada/captainslog/actions?query=workflow%3A%22Unit+Tests%22)
 [![](https://github.com/vincentfiestada/captainslog/workflows/Style%20Checks/badge.svg)](https://github.com/vincentfiestada/captainslog/actions?query=workflow%3A%22Style+Checks%22)
-[![Reference](https://pkg.go.dev/badge/github.com/vincentfiestada/captainslog/v2)](https://pkg.go.dev/github.com/vincentfiestada/captainslog/v2?tab=doc)
+[![Go Reference](https://img.shields.io/badge/reference-007d9c.svg?labelColor=16161b&logo=go)](https://pkg.go.dev/github.com/vincentfiestada/captainslog/v2?tab=doc)
 [![Conventional Commits](https://img.shields.io/badge/commits-conventional-0047ab.svg?labelColor=16161b)](https://conventionalcommits.org)
 [![License: BSD-3](https://img.shields.io/github/license/vincentfiestada/captainslog.svg?labelColor=16161b&color=0047ab)](./license)
 
 A simple logging library for [Go](https://golang.org/)
 
-- Colors
-- Multiple levels
-- Structured logging
-- Function name detection
+- cross-platform colors
+- multiple log levels
+- structured logging
+- caller detection
 
 ![Screenshot of captainslog in action](./assets/demo.png)
 
@@ -64,15 +64,14 @@ There are several [log formats](./docs/format.md) included that you can choose f
 
 ## Performance
 
-The main goals of this library are convenience and familiarity for programmers, but it should have reasonable performance for most projects. To see for yourself, run the benchmarks using `Invoke-Benchmarks`.
+The main goals of this library are convenience and familiarity for programmers, but it should have reasonable performance for most projects. To see for yourself, run the benchmarks using `./tools benchmark`.
 
 ## Development
 
-Please read the [Contribution Guide](./CONTRIBUTING.md) before you proceed. This project uses [Powershell Core](https://microsoft.com/PowerShell) to run tasks. To get started,
+Please read the [Contribution Guide](./CONTRIBUTING.md) before you proceed. This project uses [tools](https://vincent.click/toolkit) that run on [Powershell Core](https://microsoft.com/PowerShell). To get started,
 
 ```ps1
-Import-Module .\tasks.psm1
-Get-Command -Module tasks
+./tools help
 ```
 
 ## Copyright

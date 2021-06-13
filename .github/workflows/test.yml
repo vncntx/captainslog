@@ -26,8 +26,8 @@ jobs:
 
       - name: Run tests
         shell: pwsh
+        env:
+          GO111MODULE: on
         run: |
-            $env:GO111MODULE = 'on'
-            Import-Module ./tasks.psm1
-            Install-Project
-            Invoke-Tests
+            ./tools.ps1 install
+            ./tools.ps1 test
