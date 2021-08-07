@@ -46,7 +46,8 @@ function Invoke-GoChecks {
     $e = 0
     $w = 0
 
-    golangci-lint run --fix=$Fix --out-format=json 2>&1 | ForEach-Object {
+    $GO_BIN = (go env GOBIN)
+    Invoke-Expression "$(Join-Path $GO_BIN 'golangci-lint') run --fix=$Fix --out-format=json" 2>&1 | ForEach-Object {
         $log = $_
 
         switch -Regex ($log) {
