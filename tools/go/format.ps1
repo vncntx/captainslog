@@ -116,13 +116,16 @@ Optimize-Imports
 function Optimize-Imports {
     $errs = [CodeErrorCollection]::new()
     
-    $GO_BIN = (go env GOBIN)
-    if (-not (Get-Command -Name (Join-Path $GO_BIN 'gci') -ErrorAction SilentlyContinue)) {
+    if (-not $env:GOBIN) {
+        Write-Warning '$env:GOBIN is not set'
+        return $errs.Errors
+    }
+    if (-not (Get-Command -Name (Join-Path $env:GOBIN 'gci') -ErrorAction SilentlyContinue)) {
         Write-Warning 'unable to optimize imports'
         return $errs.Errors
     }
 
-    Invoke-Expression "$(Join-Path $GO_BIN 'gci') -w ." 2>&1 | ForEach-Object {
+    Invoke-Expression "$(Join-Path $env:GOBIN 'gci') -w ." 2>&1 | ForEach-Object {
         $log = $_
 
         $skip = '^skip file'
