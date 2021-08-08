@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"captainslog/v2"
-	"captainslog/v2/format"
+	"vincent.click/pkg/captainslog/v2"
+	"vincent.click/pkg/captainslog/v2/format"
 )
 
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

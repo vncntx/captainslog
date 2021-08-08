@@ -1,8 +1,8 @@
 package main
 
 import (
-	"captainslog/v2"
-	"captainslog/v2/levels"
+	"vincent.click/pkg/captainslog/v2"
+	"vincent.click/pkg/captainslog/v2/levels"
 )
 
 var log *captainslog.Logger

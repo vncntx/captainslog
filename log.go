@@ -4,10 +4,10 @@ import (
 	"os"
 	"time"
 
-	"captainslog/v2/caller"
-	"captainslog/v2/format"
-	"captainslog/v2/levels"
-	"captainslog/v2/msg"
+	"vincent.click/pkg/captainslog/v2/caller"
+	"vincent.click/pkg/captainslog/v2/format"
+	"vincent.click/pkg/captainslog/v2/levels"
+	"vincent.click/pkg/captainslog/v2/msg"
 )
 
 // Defaults

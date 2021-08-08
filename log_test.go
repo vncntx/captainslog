@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"captainslog/v2"
-	"captainslog/v2/levels"
-	"captainslog/v2/preflight"
+	"vincent.click/pkg/captainslog/v2"
+	"vincent.click/pkg/captainslog/v2/levels"
+	"vincent.click/pkg/captainslog/v2/preflight"
 )
 
 // Patterns

@@ -1,4 +1,4 @@
-module captainslog/v2
+module vincent.click/pkg/captainslog/v2
 
 go 1.16
 

@@ -3,15 +3,15 @@ package caller_test
 import (
 	"testing"
 
-	"captainslog/v2/caller"
-	"captainslog/v2/preflight"
+	"vincent.click/pkg/captainslog/v2/caller"
+	"vincent.click/pkg/captainslog/v2/preflight"
 )
 
 func TestGetName(test *testing.T) {
 	t := preflight.Unit(test)
 
 	// GetName(1) should return the name of the calling function
-	this := "captainslog/v2/caller_test.TestGetName"
+	this := "vincent.click/pkg/captainslog/v2/caller_test.TestGetName"
 	t.Expect(caller.GetName(1)).Equals(this)
 
 	func() {

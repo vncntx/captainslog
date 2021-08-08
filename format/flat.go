@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"captainslog/v2/msg"
+	"vincent.click/pkg/captainslog/v2/msg"
 )
 
 // Flat formats a message as flat text

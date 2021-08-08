@@ -5,8 +5,8 @@ import (
 	"os"
 	"sync"
 
-	"captainslog/v2/levels"
-	"captainslog/v2/preflight"
+	"vincent.click/pkg/captainslog/v2/levels"
+	"vincent.click/pkg/captainslog/v2/preflight"
 )
 
 // Field is a key-value pair
