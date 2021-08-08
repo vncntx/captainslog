@@ -3,5 +3,5 @@ package captainslog
 
 // Package information
 const (
-	Version = "2.4.3"
+	Version = "2.5.0"
 )
