@@ -3,7 +3,7 @@ package format
 import (
 	"fmt"
 
-	"captainslog/v2/msg"
+	"vincent.click/pkg/captainslog/v2/msg"
 )
 
 // JSON formats a message as JSON

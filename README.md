@@ -31,7 +31,7 @@ This library is designed to provide a familiar yet powerful interface for loggin
 package main
 
 import (
-	"captainslog/v2"
+	"vincent.click/pkg/captainslog/v2"
 )
 
 var log = captainslog.NewLogger()
