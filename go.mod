@@ -1,4 +1,4 @@
-module github.com/vincentfiestada/captainslog/v2
+module captainslog/v2
 
 go 1.16
 

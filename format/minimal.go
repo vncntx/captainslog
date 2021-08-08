@@ -3,7 +3,7 @@ package format
 import (
 	"fmt"
 
-	"github.com/vincentfiestada/captainslog/v2/msg"
+	"captainslog/v2/msg"
 )
 
 // Minimal prints a minimal log with no timestamp or name

@@ -2,9 +2,9 @@
 
 # Captain's Log
 
-[![](https://github.com/vincentfiestada/captainslog/workflows/Unit%20Tests/badge.svg)](https://github.com/vincentfiestada/captainslog/actions?query=workflow%3A%22Unit+Tests%22)
-[![](https://github.com/vincentfiestada/captainslog/workflows/Style%20Checks/badge.svg)](https://github.com/vincentfiestada/captainslog/actions?query=workflow%3A%22Style+Checks%22)
-[![Go Reference](https://img.shields.io/badge/reference-007d9c.svg?labelColor=16161b&logo=go&logoColor=white)](https://pkg.go.dev/github.com/vincentfiestada/captainslog/v2?tab=doc)
+[![](https://github.com/vncntx/captainslog/workflows/Unit%20Tests/badge.svg)](https://github.com/vncntx/captainslog/actions?query=workflow%3A%22Unit+Tests%22)
+[![](https://github.com/vncntx/captainslog/workflows/Style%20Checks/badge.svg)](https://github.com/vncntx/captainslog/actions?query=workflow%3A%22Style+Checks%22)
+[![Go Reference](https://img.shields.io/badge/reference-007d9c.svg?labelColor=16161b&logo=go&logoColor=white)](https://pkg.go.dev/github.com/vncntx/captainslog/v2?tab=doc)
 [![Conventional Commits](https://img.shields.io/badge/commits-conventional-0047ab.svg?labelColor=16161b)](https://conventionalcommits.org)
 [![License: BSD-3](https://img.shields.io/github/license/vincentfiestada/captainslog.svg?labelColor=16161b&color=0047ab)](./license)
 
@@ -20,7 +20,7 @@ A simple logging library for [Go](https://golang.org/)
 ## Installation
 
 ```
-go get github.com/vincentfiestada/captainslog/v2
+go get github.com/vncntx/captainslog/v2
 ```
 
 ## Usage
@@ -31,7 +31,7 @@ This library is designed to provide a familiar yet powerful interface for loggin
 package main
 
 import (
-	"github.com/vincentfiestada/captainslog/v2"
+	"captainslog/v2"
 )
 
 var log = captainslog.NewLogger()
