@@ -5,8 +5,8 @@ import (
 	"os"
 	"sync"
 
-	"github.com/vincentfiestada/captainslog/v2/levels"
-	"github.com/vincentfiestada/captainslog/v2/preflight"
+	"captainslog/v2/levels"
+	"captainslog/v2/preflight"
 )
 
 // Field is a key-value pair

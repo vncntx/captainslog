@@ -4,10 +4,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/vincentfiestada/captainslog/v2/format"
-	"github.com/vincentfiestada/captainslog/v2/levels"
-	"github.com/vincentfiestada/captainslog/v2/msg"
-	"github.com/vincentfiestada/captainslog/v2/preflight"
+	"captainslog/v2/format"
+	"captainslog/v2/levels"
+	"captainslog/v2/msg"
+	"captainslog/v2/preflight"
 )
 
 func TestProps(test *testing.T) {
