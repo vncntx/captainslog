@@ -50,7 +50,6 @@ function Invoke-GoChecks {
         Write-Warning '$env:GOBIN is not set'
         exit [Error]::NoGoBin
     }
-    
     Invoke-Expression "$(Join-Path $env:GOBIN 'golangci-lint') run --fix=$Fix --out-format=json" 2>&1 | ForEach-Object {
         $log = $_
 
