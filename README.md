@@ -1,6 +1,6 @@
 ![](./icon.svg)
 
-# Captain's Log
+# captainslog
 
 [![](https://github.com/vncntx/captainslog/workflows/Unit%20Tests/badge.svg)](https://github.com/vncntx/captainslog/actions?query=workflow%3A%22Unit+Tests%22)
 [![](https://github.com/vncntx/captainslog/workflows/Style%20Checks/badge.svg)](https://github.com/vncntx/captainslog/actions?query=workflow%3A%22Style+Checks%22)
@@ -25,7 +25,7 @@ go get vincent.click/pkg/captainslog/v2
 
 ## Usage
 
-This library is designed to provide a familiar yet powerful interface for logging. Each logging method accepts a format string and arguments. Structured logging is supported right out of the box. The Logger allows you to turn colors on/off, specify a datetime format, set the logging threshold, and even provide your own function to control how logs are written.
+This library is designed to provide a familiar yet powerful logging interface. Each log method accepts a format string and arguments. Structured logging is supported right out of the box. You can turn colors on/off, specify a custom datetime format, set the minimum level that will be logged, and even provide your own function to control how logs are written.
 
 ```go
 package main
