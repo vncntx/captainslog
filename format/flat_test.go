@@ -13,7 +13,8 @@ import (
 func TestFlat(test *testing.T) {
 	t := preflight.Unit(test)
 
-	t.ExpectOutput(func(stdout *os.File) {
+	w := t.ExpectWritten(func(stdout *os.File) {
+
 		message := &msg.Message{
 			Time:      "08-28-2019 12:32:24 PST",
 			Name:      "captainslog",
@@ -32,5 +33,8 @@ func TestFlat(test *testing.T) {
 
 		message.Print(message)
 
-	}).Equals("  info :: 08-28-2019 12:32:24 PST :: captainslog :: captain=\"picard\", first officer=\"riker\" :: starship enterprise\n")
+	})
+	defer w.Close()
+
+	w.Text().Equals("  info :: 08-28-2019 12:32:24 PST :: captainslog :: captain=\"picard\", first officer=\"riker\" :: starship enterprise\n")
 }

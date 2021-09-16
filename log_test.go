@@ -8,6 +8,7 @@ import (
 	"vincent.click/pkg/captainslog/v2"
 	"vincent.click/pkg/captainslog/v2/levels"
 	"vincent.click/pkg/captainslog/v2/preflight"
+	"vincent.click/pkg/captainslog/v2/preflight/log"
 )
 
 // Patterns
@@ -66,7 +67,7 @@ func TestNewLogger(test *testing.T) {
 func TestLogs(test *testing.T) {
 	t := preflight.Unit(test)
 
-	stdout, stderr := t.CaptureLogs(func(stdout *os.File, stderr *os.File) {
+	stdout, stderr := t.ExpectLogged(func(stdout *os.File, stderr *os.File) {
 		log := getLogger()
 		log.Stdout = stdout
 		log.Stderr = stderr
@@ -78,7 +79,7 @@ func TestLogs(test *testing.T) {
 		log.Error("message %d", 5)
 	})
 
-	check := func(log *preflight.LogExpectation, level string, message string) {
+	check := func(log log.Expectations, level string, message string) {
 		log.Fields.Is().Empty()
 		log.Level.Equals(level)
 		log.Message.Equals(message)
@@ -128,7 +129,7 @@ func TestName(test *testing.T) {
 
 	expectedName := "captainslog"
 
-	logs, _ := t.CaptureLogs(func(stdout *os.File, _ *os.File) {
+	logs, _ := t.ExpectLogged(func(stdout *os.File, _ *os.File) {
 		log := getLogger()
 		log.Stdout = stdout
 		log.Name = expectedName
@@ -144,7 +145,7 @@ func TestTimeFormat(test *testing.T) {
 
 	rfc822 := "[0-9]{2} [A-Z][a-z]{2} [0-9]{2} [0-9]{2}:[0-9]{2} .+"
 
-	logs, _ := t.CaptureLogs(func(stdout *os.File, _ *os.File) {
+	logs, _ := t.ExpectLogged(func(stdout *os.File, _ *os.File) {
 		log := getLogger()
 		log.Stdout = stdout
 		log.TimeFormat = time.RFC822
@@ -158,7 +159,7 @@ func TestTimeFormat(test *testing.T) {
 func TestExit(test *testing.T) {
 	t := preflight.Unit(test)
 
-	_, logs := t.CaptureLogs(func(_ *os.File, stderr *os.File) {
+	_, logs := t.ExpectLogged(func(_ *os.File, stderr *os.File) {
 		t.ExpectExitCode(func() {
 			log := captainslog.NewLogger()
 			log.Stderr = stderr
@@ -190,7 +191,7 @@ func TestPanic(test *testing.T) {
 		t.Expect(recover().(error).Error()).Equals("x")
 	}()
 
-	_, logs := t.CaptureLogs(func(_ *os.File, stderr *os.File) {
+	_, logs := t.ExpectLogged(func(_ *os.File, stderr *os.File) {
 		log := getLogger()
 		log.Stderr = stderr
 
@@ -211,7 +212,7 @@ func ExampleLogger_Field() {
 func TestField(test *testing.T) {
 	t := preflight.Unit(test)
 
-	logs, _ := t.CaptureLogs(func(stdout *os.File, stderr *os.File) {
+	logs, _ := t.ExpectLogged(func(stdout *os.File, stderr *os.File) {
 		log := getLogger()
 		log.Stdout = stdout
 		log.Stderr = stderr
@@ -244,7 +245,7 @@ func ExampleLogger_Fields() {
 func TestFields(test *testing.T) {
 	t := preflight.Unit(test)
 
-	logs, _ := t.CaptureLogs(func(stdout *os.File, stderr *os.File) {
+	logs, _ := t.ExpectLogged(func(stdout *os.File, stderr *os.File) {
 		log := getLogger()
 		log.Stdout = stdout
 		log.Stderr = stderr
@@ -261,7 +262,7 @@ func TestFields(test *testing.T) {
 func TestLevels(test *testing.T) {
 	t := preflight.Unit(test)
 
-	stdout, stderr := t.CaptureLogs(func(stdout *os.File, stderr *os.File) {
+	stdout, stderr := t.ExpectLogged(func(stdout *os.File, stderr *os.File) {
 		log := getLogger()
 		log.Stdout = stdout
 		log.Stderr = stderr

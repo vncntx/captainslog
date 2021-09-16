@@ -13,7 +13,8 @@ import (
 func TestJSON(test *testing.T) {
 	t := preflight.Unit(test)
 
-	t.ExpectOutput(func(stdout *os.File) {
+	w := t.ExpectWritten(func(stdout *os.File) {
+
 		message := &msg.Message{
 			Time:      "08-28-2019 12:32:24 PST",
 			Name:      "captainslog",
@@ -32,5 +33,8 @@ func TestJSON(test *testing.T) {
 
 		message.Print(message)
 
-	}).Equals("{\"level\":\"info\",\"time\":\"08-28-2019 12:32:24 PST\",\"from\":\"captainslog\",\"fields\":{\"captain\":\"picard\",\"first officer\":\"riker\"},\"message\":\"starship enterprise\"}\n")
+	})
+	defer w.Close()
+
+	w.Text().Equals("{\"level\":\"info\",\"time\":\"08-28-2019 12:32:24 PST\",\"from\":\"captainslog\",\"fields\":{\"captain\":\"picard\",\"first officer\":\"riker\"},\"message\":\"starship enterprise\"}\n")
 }

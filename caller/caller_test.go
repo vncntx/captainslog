@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"vincent.click/pkg/captainslog/v2/caller"
-	"vincent.click/pkg/captainslog/v2/preflight"
+	"vincent.click/pkg/preflight"
 )
 
 func TestGetName(test *testing.T) {

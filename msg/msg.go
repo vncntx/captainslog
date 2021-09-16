@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"vincent.click/pkg/captainslog/v2/levels"
-	"vincent.click/pkg/captainslog/v2/preflight"
+	"vincent.click/pkg/preflight"
 )
 
 // Field is a key-value pair
@@ -111,13 +111,13 @@ func (msg *Message) Error(format string, args ...interface{}) {
 // Exit outputs the message as an error and exits with the given code
 func (msg *Message) Exit(code int, format string, args ...interface{}) {
 	msg.Log(levels.Fatal, format, args...)
-	preflight.Scaffold.OSExit(code)
+	preflight.Captor.Exit(code)
 }
 
 // Fatal outputs the message as an error and exits with code 1
 func (msg *Message) Fatal(format string, args ...interface{}) {
 	msg.Log(levels.Fatal, format, args...)
-	preflight.Scaffold.OSExit(1)
+	preflight.Captor.Exit(1)
 }
 
 // Panic outputs the message as an error and panics
