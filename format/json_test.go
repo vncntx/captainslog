@@ -7,7 +7,7 @@ import (
 	"vincent.click/pkg/captainslog/v2/format"
 	"vincent.click/pkg/captainslog/v2/levels"
 	"vincent.click/pkg/captainslog/v2/msg"
-	"vincent.click/pkg/captainslog/v2/preflight"
+	"vincent.click/pkg/preflight"
 )
 
 func TestJSON(test *testing.T) {
