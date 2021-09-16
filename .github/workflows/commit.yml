@@ -1,0 +1,38 @@
+name: Commits
+on: [push]
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  lint:
+    name: Static Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Detect issues using linters 
+        uses: golangci/golangci-lint-action@v2
+        
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v1
+
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '^1.17'
+
+      - name: Run tests
+        env:
+          GO111MODULE: on
+        run: |
+            ./tools.ps1 install
+            ./tools.ps1 test
